@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class WindowTokenInput extends JDialog{
 	
@@ -62,6 +64,13 @@ public class WindowTokenInput extends JDialog{
 		c.gridwidth = 2;
 		c.weightx = 1.0;
 		this.add(buttonContinue, c);
+		
+		this.addWindowListener(new WindowAdapter(){
+			@Override
+			public void windowClosing(WindowEvent windowEvent){
+				System.exit(0);
+			}
+		});
 		
 		this.setPreferredSize(Util.getMultipleOfScreenResolution(0.4F, 0.1F));
 		this.pack();
