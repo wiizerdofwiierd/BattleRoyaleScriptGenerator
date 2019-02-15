@@ -18,5 +18,5 @@ That's it!
 
 Once given a token, the application will start up and display the guild selection screen  
 
-I trust that my UI design skills are good enough to warrant not putting detailed usage information here. If I have failed in this, see [Usage]() for more detailed instructions  
+I trust that my UI design skills are good enough to warrant not putting detailed usage information here. If I have failed in this, see [Usage](https://github.com/wiizerdofwiierd/BattleRoyaleScriptGenerator/wiki/Usage) for more detailed instructions  
 (And feel free to [create an issue](https://github.com/wiizerdofwiierd/BattleRoyaleScriptGenerator/issues/new) or [pull request](https://github.com/wiizerdofwiierd/BattleRoyaleScriptGenerator/compare) so we can make things more clear)
