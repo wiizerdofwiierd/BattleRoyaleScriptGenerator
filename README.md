@@ -8,7 +8,7 @@ Downloads can be found on the [Releases](https://github.com/wiizerdofwiierd/Batt
 
 ## Setup
 
-Upon first launch, you will be prompted for your Bot's token. If you do not have a token, see [Creating a Discord Application]()
+Upon first launch, you will be prompted for your Bot's token. If you do not have a token, see [Creating a Discord Application](https://github.com/wiizerdofwiierd/BattleRoyaleScriptGenerator/wiki/Creating-a-Discord-Application)
 ![](https://i.imgur.com/GtedrTT.png)
 Enter your token and click *Continue*  
 
