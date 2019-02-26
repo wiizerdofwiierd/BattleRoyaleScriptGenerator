@@ -8,10 +8,12 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.window.user.panel.remove.generate.PanelGenerate;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.PanelGenerate;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
 import java.awt.*;
@@ -28,12 +30,14 @@ public class ScriptExecutor{
 	private static final String SAVE_PREFIX = "http://brantsteele.net/hungergames/r.php?c=";
 	
 	private PanelGenerate generatePanel;
+	private Settings settings;
 	
 	private boolean hasSetSize = false;
 	private boolean hasExecuted = false;
 	
-	public ScriptExecutor(PanelGenerate generatePanel){
+	public ScriptExecutor(PanelGenerate generatePanel, Settings settings){
 		this.generatePanel = generatePanel;
+		this.settings = settings;
 	}
 	
 	public void execute(String script){
@@ -55,7 +59,7 @@ public class ScriptExecutor{
 						if(!ScriptExecutor.this.hasSetSize){
 							System.out.println("Setting cast size...");
 
-							int castSize = ScriptExecutor.this.generatePanel.getParentFrame().getSettings().getCastSize().getNumPlayers();
+							int castSize = ScriptExecutor.this.settings.castSize.getValue().getNumPlayers();
 							webEngine.load(String.format(URL_SIZE, castSize));
 							
 							ScriptExecutor.this.hasSetSize = true;
@@ -71,28 +75,8 @@ public class ScriptExecutor{
 								ScriptExecutor.this.hasExecuted = true;
 								ScriptExecutor.this.generatePanel.setProgress(0.7F);
 
-								NodeList nodes = webEngine.getDocument().getElementsByTagName("input");
-								outer:
-								for(int i = 0;i < nodes.getLength();i++){
-
-									Node n = nodes.item(i);
-									for(int j = 0;j < n.getAttributes().getLength();j++){
-
-										String name = n.getAttributes().item(j).getNodeName();
-										String value = n.getAttributes().item(j).getNodeValue();
-
-										if(name.equals("value") && value.equals("Submit")){
-											System.out.println("Submitting form...");
-											HTMLInputElement submitButton = (HTMLInputElement) n;
-											
-											submitButton.click();
-											ScriptExecutor.this.generatePanel.setProgress(0.8F);
-											
-											break outer;
-										}
-									}
-
-								}
+								submitForm(webEngine.getDocument());
+								ScriptExecutor.this.generatePanel.setProgress(0.8F);
 							}
 							else{
 								System.out.println("Loading edit page...");
@@ -138,8 +122,32 @@ public class ScriptExecutor{
 	public void presentURL(String value){
 		Util.openInBrowser(value);
 		
-		if(this.generatePanel.getParentFrame().getSettings().autoCopyLink()){
+		if(this.settings.autoCopyLink.getValue()){
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(value), null);
+		}
+	}
+	
+	private void submitForm(Document document){
+		NodeList nodes = document.getElementsByTagName("input");
+		outer:
+		for(int i = 0;i < nodes.getLength();i++){
+
+			Node n = nodes.item(i);
+			for(int j = 0;j < n.getAttributes().getLength();j++){
+
+				String name = n.getAttributes().item(j).getNodeName();
+				String value = n.getAttributes().item(j).getNodeValue();
+
+				if(name.equals("value") && value.equals("Submit")){
+					System.out.println("Submitting form...");
+					HTMLInputElement submitButton = (HTMLInputElement) n;
+
+					submitButton.click();
+
+					break outer;
+				}
+			}
+
 		}
 	}
 }

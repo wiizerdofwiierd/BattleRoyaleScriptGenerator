@@ -1,6 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.script;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SettingsHandler;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -19,14 +20,12 @@ public class MemberList implements Collection<Member>{
 	}
 	
 	public List<Member> getMembersByParticipation(boolean participation, Settings settings){
-		boolean showBots = settings.showBots();
-		boolean showCustom = settings.showCustom();
-		boolean showHidden = settings.showHidden();
+		boolean showBots = settings.showBots.getValue();
+		boolean showCustom = settings.showCustom.getValue();
 		
 		return getMembersByParticipation(participation).stream()
 				.filter(m -> (m.isBot() && showBots) || !m.isBot())
 				.filter(m -> m.isCustom() && showCustom	 || !m.isCustom())
-				.filter(m -> (m.isHidden() && showHidden) || !m.isHidden())
 				.collect(Collectors.toList());
 	}
 	
@@ -62,21 +61,32 @@ public class MemberList implements Collection<Member>{
 				//Skip custom users
 				if(m.isCustom()) continue;
 				
-				//TODO: Optimize
-				//Hide this user if they are not in the specified server
+				//TODO: Optimize?
+				//Set this user as orphaned if they are not in the specified server
 				if(!userIds.contains(m.getId())){
-					m.setHidden(true);
+					m.setOrphaned(true);
 				}
 				
-				//Skip this user if they are already in the members list, and do not hide them
+				//Skip this user if they are already in the members list, and set them as not orphaned
 				if(m.getId() == id){
-					m.setHidden(false);
+					m.setOrphaned(false);
 					continue outer;
 				}
 			}
 
 			members.add(new Member(user, guild));
 		}
+
+		int purgeCount = purgeOrphans();
+		System.out.println("Purged " + purgeCount + " orphaned user" + (purgeCount == 1 ? "" : "s"));
+		SettingsHandler.getInstance().save();
+	}
+	
+	public int purgeOrphans(){
+		List<Member> purgeList = this.stream().filter(m -> m.isOrphaned()).collect(Collectors.toList());
+		purgeList.forEach(this::remove);
+		
+		return purgeList.size();
 	}
 	
 	@Override

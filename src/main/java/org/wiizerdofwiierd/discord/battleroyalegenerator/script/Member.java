@@ -1,6 +1,5 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.script;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -15,7 +14,7 @@ public class Member{
 	private String customImgUrl;
 	private boolean participating;
 	private boolean bot;
-	private boolean hidden;
+	private boolean orphaned;
 	private boolean custom;
 
 	/**
@@ -23,10 +22,10 @@ public class Member{
 	 * @param user
 	 */
 	public Member(IUser user, IGuild guild){
-		this(user.getLongID(), Gender.MALE, user.getName(), user.getDisplayName(guild), null, false, user.isBot(), false, false);
+		this(user.getLongID(), Gender.MALE, user.getName(), user.getDisplayName(guild), null, false, user.isBot(), false);
 	}
 
-	private Member(long id, Gender gender, String name, String nickname, String imgUrl, boolean participating, boolean bot, boolean hidden, boolean custom){
+	private Member(long id, Gender gender, String name, String nickname, String imgUrl, boolean participating, boolean bot, boolean custom){
 		this.id = id;
 		this.gender = gender;
 		this.name = name;
@@ -34,12 +33,11 @@ public class Member{
 		this.customImgUrl = imgUrl;
 		this.participating = participating;
 		this.bot = bot;
-		this.hidden = hidden;
 		this.custom = custom;
 	}
 	
 	public static Member createCustomMember(Gender gender, String name, String nickname, String imgUrl){
-		return new Member(-1L, gender, name, nickname, imgUrl, false, false, false, true);
+		return new Member(-1L, gender, name, nickname, imgUrl, false, false, true);
 	}
 	
 	public static boolean validateName(String name){
@@ -66,10 +64,6 @@ public class Member{
 		return this.customImgUrl;
 	}
 	
-	public String getImgURL(){
-		return this.custom ? getCustomImgURL() : Main.getClient().getUserByID(this.id).getAvatarURL().replaceAll("webp", "png");
-	}
-	
 	public boolean isParticipating(){
 		return this.participating;
 	}
@@ -78,8 +72,8 @@ public class Member{
 		return this.bot;
 	}
 	
-	public boolean isHidden(){
-		return this.hidden;
+	public boolean isOrphaned(){
+		return this.orphaned;
 	}
 	
 	public boolean isCustom(){
@@ -94,16 +88,16 @@ public class Member{
 		this.name = name;
 	}
 	
+	public void setOrphaned(boolean orphaned){
+		this.orphaned = orphaned;
+	}
+	
 	public void setNickname(String nickname){
 		this.nickname = nickname;
 	}
 	
 	public void setParticipating(boolean participating){
 		this.participating = participating;
-	}
-	
-	public void setHidden(boolean hidden){
-		this.hidden = hidden;
 	}
 	
 	public void restoreInfo(IUser user, IGuild guild){

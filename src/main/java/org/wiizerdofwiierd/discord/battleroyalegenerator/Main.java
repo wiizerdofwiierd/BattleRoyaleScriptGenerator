@@ -5,9 +5,9 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import org.slf4j.LoggerFactory;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SettingsHandler;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.token.WindowTokenInput;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.window.console.WindowConsole;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.window.guild.WindowGuildSelect;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.console.WindowConsole;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild.WindowGuildSelect;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.setup.WindowTokenInput;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -24,13 +24,11 @@ public class Main{
 	public static final File TOKEN_FILE = new File(System.getProperty("user.dir") + File.separator + "token.txt");
 	
 	private static IDiscordClient client = null;
-
-	private static SettingsHandler settingsHandler = null;
+	
 	private static WindowGuildSelect guildSelectionWindow = null;
 	private static WindowConsole consoleWindow = null;
 
 	public static void main(String[] args){
-		
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 		loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN);
 		
@@ -47,15 +45,14 @@ public class Main{
 
 		consoleWindow = new WindowConsole();
 
-		settingsHandler = new SettingsHandler();
-		settingsHandler.load();
+		SettingsHandler.getInstance().load();
 		
 		initLogin();
 		
 		client.getDispatcher().registerListener(new EventListener());
 
 		SwingUtilities.invokeLater(() -> {
-			guildSelectionWindow = new WindowGuildSelect("Select Guild...", client);
+			guildSelectionWindow = new WindowGuildSelect(client);
 			guildSelectionWindow.setVisible(true);
 		});
 	}
@@ -103,10 +100,6 @@ public class Main{
 
 	public static IDiscordClient getClient(){
 		return client;
-	}
-	
-	public static SettingsHandler getSettingsHandler(){
-		return settingsHandler;
 	}
 	
 	public static WindowGuildSelect getGuildSelectionWindow(){

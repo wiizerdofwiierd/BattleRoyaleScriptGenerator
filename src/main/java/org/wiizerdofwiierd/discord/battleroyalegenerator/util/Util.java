@@ -27,6 +27,10 @@ public class Util{
 		return ext;
 	}
 
+	public static String formatHTMLImageTag(String uri, int width, int height){
+		return String.format("<html><img src=\"%s\" width=\"%d\" height=\"%d\"></html>", uri, width, height);
+	}
+
 	public static void openInBrowser(String uri){
 		Desktop desktop = Desktop.getDesktop();
 		try{

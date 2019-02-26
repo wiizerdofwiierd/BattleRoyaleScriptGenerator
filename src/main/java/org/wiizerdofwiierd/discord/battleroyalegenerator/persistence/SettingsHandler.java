@@ -1,12 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.script.CastSize;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.script.MemberList;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Setting.SettingDeserializer;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Setting.SettingSerializer;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.*;
@@ -19,10 +16,19 @@ public class SettingsHandler{
 	
 	public static final File SETTINGS_FILE = new File(System.getProperty("user.dir") + File.separator + "persistence.json");
 	
-	private Map<String, Settings> guildSettings = new HashMap<>();
-	private File lastModified = SETTINGS_FILE;
+	private static SettingsHandler instance;
 	
-	public SettingsHandler(){}
+	private Map<String, Settings> guildSettings = new HashMap<>();
+	
+	private transient File lastModified = SETTINGS_FILE;
+	
+	static{
+		instance = new SettingsHandler();
+	}
+	
+	public static SettingsHandler getInstance(){
+		return instance;
+	}
 	
 	public Settings getSettingsForGuild(IGuild guild){
 		return getSettingsForGuild(guild.getLongID());
@@ -61,28 +67,10 @@ public class SettingsHandler{
 			return this;
 		}
 		
-		Gson gson = new Gson();
-		
 		try(BufferedReader reader = new BufferedReader(new FileReader(file))){
 			String json = reader.lines().collect(Collectors.joining());
-
-			GsonBuilder builder = new GsonBuilder();
 			
-			JsonDeserializer<Settings> settingsDeserializer = (jsonElement, type, jsonDeserializationContext) -> {
-				JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-				boolean showBots = jsonObject.get("showBots").getAsBoolean();
-				boolean showCustom = jsonObject.get("showCustom").getAsBoolean();
-				boolean showHidden = jsonObject.get("showHidden").getAsBoolean();
-				boolean autoGenerateUrl = jsonObject.get("autoGenerateUrl").getAsBoolean();
-				boolean autoCopyLink = jsonObject.get("autoCopyLink").getAsBoolean();
-				
-				CastSize castSize = CastSize.getFromValue(jsonObject.get("castSize").getAsInt());
-				if(castSize == null) castSize = CastSize.SIZE_24;
-				
-				return new Settings(showBots, showCustom, showHidden, autoGenerateUrl, autoCopyLink, castSize, new MemberList());
-			};
-			builder.registerTypeAdapter(Settings.class, settingsDeserializer);
+			Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(Setting.class, new SettingDeserializer()).create();
 			
 			Type type = new TypeToken<Map<String, Settings>>(){}.getType();
 			Map<String, Settings> deserialized = gson.fromJson(json, type);
@@ -112,7 +100,8 @@ public class SettingsHandler{
 	 * @param output File to output
 	 */
 	public void save(File output){
-		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(Setting.class, new SettingSerializer()).setPrettyPrinting().create();
+		
 		String json = gson.toJson(guildSettings);
 
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
