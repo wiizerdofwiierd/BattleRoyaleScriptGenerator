@@ -86,6 +86,7 @@ public class PanelGenerate extends JPanel{
 	public void toggleProgressBar(){
 		this.generateButton.setVisible(!this.showingButton);
 		this.progressBar.setVisible(this.showingButton);
+		this.mainWindow.setEnabled(!this.showingButton);
 		
 		this.showingButton = !this.showingButton;
 	}

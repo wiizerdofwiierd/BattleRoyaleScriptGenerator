@@ -1,5 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage;
 
+import org.wiizerdofwiierd.discord.battleroyalegenerator.event.EventContext;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SettingsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.script.Member;
@@ -58,12 +59,9 @@ public class WindowGameManage extends JFrame{
 		
 		tabbedPane.addTab("Tributes", panel);
 		
-		/*
 		for(EventContext context : EventContext.values()){
-			tabbedPane.addTab(context.getName() + " Events", null);
-			tabbedPane.setEnabledAt(tabbedPane.getTabCount() - 1, false);
+			tabbedPane.addTab(context.getName() + " Events", new PanelEventList(context));
 		}
-		*/
 		
 		this.setPreferredSize(Util.getMultipleOfScreenResolution(0.5F, 0.5F));
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

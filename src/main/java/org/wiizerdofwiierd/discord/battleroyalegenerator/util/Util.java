@@ -1,13 +1,24 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.util;
 
+import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Util{
 
+	public static InputStreamReader getReaderForResource(String path){
+		if(!path.startsWith("/")){
+			path = "/" + path;
+		}
+		
+		return new InputStreamReader(Main.class.getResourceAsStream(path));
+	}
+	
 	public static Dimension getMultipleOfScreenResolution(float multX, float multY){
 		Dimension screenResolution = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Dimension((int) (screenResolution.getWidth() * multX), (int) (screenResolution.getHeight() * multY));

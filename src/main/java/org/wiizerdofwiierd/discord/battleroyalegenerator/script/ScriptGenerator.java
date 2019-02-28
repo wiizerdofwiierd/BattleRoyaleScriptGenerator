@@ -1,6 +1,5 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.script;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 import sx.blah.discord.api.IDiscordClient;
@@ -31,7 +30,7 @@ public class ScriptGenerator{
 	public String generateScript(){
 		System.out.println("Loading script template...");
 		
-		InputStreamReader inputStreamReader = new InputStreamReader(Main.class.getResourceAsStream("/royale_name_changer.js"));
+		InputStreamReader inputStreamReader = Util.getReaderForResource("royale_name_changer.js");
 		
 		String generated;
 		try(BufferedReader reader = new BufferedReader(inputStreamReader)){
