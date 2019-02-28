@@ -74,7 +74,13 @@ public class MemberList implements Collection<Member>{
 				}
 			}
 
-			members.add(new Member(user, guild));
+			Member member = new Member(user, guild);
+			//If the user has an invalid nickname, but a valid name, set the nickname to the name
+			if(!Member.validateName(member.getNickname()) && Member.validateName(member.getName())){
+				member.setNickname(member.getName());
+			}
+			
+			members.add(member);
 		}
 
 		int purgeCount = purgeOrphans();
