@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class Util{
+public final class Util{
 
 	public static InputStreamReader getReaderForResource(String path){
 		if(!path.startsWith("/")){

@@ -28,6 +28,7 @@ hs_err_pid*
 
 # Ignored project files
 /persistence.json
+/events.json
 /royale_name_changer.js
 /token.txt
 

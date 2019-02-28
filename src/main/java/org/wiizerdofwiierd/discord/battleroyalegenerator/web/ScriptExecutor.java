@@ -13,13 +13,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLInputElement;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.PanelGenerate;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member.PanelGenerate;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
-public class ScriptExecutor{
+public final class ScriptExecutor{
 	
 	private static final String URL_AGREE = "http://brantsteele.net/hungergames/agree.php";
 	private static final String URL_SIZE = "http://brantsteele.net/hungergames/ChangeTributes-%d.php";

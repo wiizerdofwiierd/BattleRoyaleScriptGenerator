@@ -4,7 +4,8 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import org.slf4j.LoggerFactory;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SettingsHandler;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.console.WindowConsole;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild.WindowGuildSelect;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.setup.WindowTokenInput;
@@ -17,7 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
-public class Main{
+public final class Main{
 	
 	public static final String VERSION = "1.4";
 	
@@ -45,7 +46,8 @@ public class Main{
 
 		consoleWindow = new WindowConsole();
 
-		SettingsHandler.getInstance().load();
+		SavedSettingsHandler.getInstance().load();
+		SavedEventsHandler.getInstance().load();
 		
 		initLogin();
 		

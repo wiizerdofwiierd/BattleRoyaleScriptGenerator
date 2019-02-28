@@ -1,8 +1,10 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SettingsHandler;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild.WindowGuildSelect;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member.DialogCreateMember;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member.JsonFileFilter;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.menubar.MenuHelp;
 
 import javax.swing.*;
@@ -24,14 +26,14 @@ public class MenuBarGameManage extends JMenuBar{
 		Icon saveIcon = UIManager.getIcon("FileView.floppyDriveIcon");
 		Icon fileIcon = UIManager.getIcon("FileView.fileIcon");
 		
-		//
+		//------------
 		//File menu
-		//
+		//------------
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 
 		JMenuItem saveButton = new JMenuItem("Save", saveIcon);
-		saveButton.addActionListener(actionEvent -> SettingsHandler.getInstance().save());
+		saveButton.addActionListener(actionEvent -> SavedSettingsHandler.getInstance().save());
 		fileMenu.add(saveButton);
 		
 		JMenuItem saveAsButton = new JMenuItem("Save as...");
@@ -45,8 +47,8 @@ public class MenuBarGameManage extends JMenuBar{
 			if(!file.getPath().endsWith(".json")){
 				file = new File(file + ".json");
 			}
-			
-			SettingsHandler.getInstance().save(file);
+
+			SavedSettingsHandler.getInstance().save(file);
 		});
 		fileMenu.add(saveAsButton);
 
@@ -58,11 +60,17 @@ public class MenuBarGameManage extends JMenuBar{
 			
 			File file = fileChooser.getSelectedFile();
 			if(file == null) return;
+
+			SavedSettingsHandler.getInstance().load(file);
 			
-			SettingsHandler.getInstance().load(file);
+			//Set the window to use our newly loaded settings
+			this.mainWindow.setSettings(SavedSettingsHandler.getInstance().getSettingsForGuild(this.mainWindow.getGuild()));
 			
-			this.mainWindow.setSettings(SettingsHandler.getInstance().getSettingsForGuild(this.mainWindow.getGuild()));
-			this.mainWindow.updateListPanels();
+			//Update the member lists to display our new set of members
+			this.mainWindow.getTributesPanel().updateMemberLists();
+			
+			//Set the selected tab in the window to the Tributes tab
+			this.mainWindow.setSelectedTab(0);
 		});
 		fileMenu.add(loadButton);
 
@@ -70,7 +78,7 @@ public class MenuBarGameManage extends JMenuBar{
 		
 		JMenuItem returnButton = new JMenuItem("Select guild...");
 		returnButton.addActionListener(actionEvent -> {
-			SettingsHandler.getInstance().load(SettingsHandler.SETTINGS_FILE);
+			SavedSettingsHandler.getInstance().load(SavedSettingsHandler.SETTINGS_FILE);
 			this.mainWindow.dispose();
 
 			WindowGuildSelect guildSelect = Main.getGuildSelectionWindow();
@@ -82,9 +90,9 @@ public class MenuBarGameManage extends JMenuBar{
 		
 		this.add(fileMenu);
 
-		//
+		//------------
 		//Edit menu
-		//
+		//------------
 		JMenu editMenu = new JMenu("Edit");
 		fileMenu.setMnemonic(KeyEvent.VK_E);
 
@@ -98,9 +106,9 @@ public class MenuBarGameManage extends JMenuBar{
 		
 		this.add(editMenu);
 		
-		//
+		//------------
 		//Help menu
-		//
+		//------------
 		MenuHelp helpMenu = new MenuHelp();
 		this.add(helpMenu);
 		

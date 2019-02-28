@@ -1,7 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.script.CastSize;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.script.MemberList;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.CastSize;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
+
+import java.util.List;
 
 public class Settings{
 	
@@ -12,6 +14,7 @@ public class Settings{
 	public Setting<CastSize> castSize;
 	
 	private MemberList members;
+	private List<String> events;
 	
 	public Settings(){
 		this.showBots 			= new Setting<>(false);
