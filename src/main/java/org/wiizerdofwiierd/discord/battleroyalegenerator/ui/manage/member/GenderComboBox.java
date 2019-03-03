@@ -19,8 +19,6 @@ public class GenderComboBox extends JComboBox{
 			for(Member m : members){
 				m.setGender((Gender) this.getSelectedItem());
 			}
-
-			parentTable.update();
 		});
 	}
 }

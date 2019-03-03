@@ -14,8 +14,7 @@ public class NameTextField extends JTextField{
 			for(Member m : members){
 				m.setName(name);
 			}
-			
-			parentTable.update();
+
 			parentTable.getTributesPanel().updateGenerateButton();
 		});
 	}

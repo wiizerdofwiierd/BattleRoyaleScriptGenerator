@@ -17,13 +17,21 @@ public class ButtonMemberSwap extends JButton{
 		this.participation = participationToSet;
 
 		this.addActionListener(actionEvent -> {
-			System.out.println("Setting " + this.tributesPanel.getSelectedMembers().length + " members to participation = " + this.participation);
+			int size = tributesPanel.getSelectedMembers().length;
+			System.out.printf("Setting %d members to participation = %s%n", size, this.participation);
 			
 			for(Member m : this.tributesPanel.getSelectedMembers()){
 				m.setParticipating(this.participation);
 			}
 			
 			this.tributesPanel.updateMemberLists();
+			
+			if(participationToSet == true){
+				tributesPanel.getMainWindow().setStatusBarText("Added %d members to the game", size);
+			}
+			else{
+				tributesPanel.getMainWindow().setStatusBarText("Removed %d members from the game", size);
+			}
 		});
 		
 		this.setEnabled(false);

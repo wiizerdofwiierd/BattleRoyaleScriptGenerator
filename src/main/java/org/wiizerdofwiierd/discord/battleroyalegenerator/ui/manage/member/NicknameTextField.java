@@ -15,7 +15,6 @@ public class NicknameTextField extends JTextField{
 				m.setNickname(nickname);
 			}
 			
-			parentTable.update();
 			parentTable.getTributesPanel().updateGenerateButton();
 		});
 	}

@@ -5,8 +5,8 @@ import java.awt.*;
 
 public class PanelListManage extends JPanel{
 	
-	protected PanelManageTributes tributesPanel;
-	protected PanelSettings settingsPanel;
+	private PanelManageTributes tributesPanel;
+	private PanelSettings settingsPanel;
 	
 	private ButtonMemberSwap addButton;
 	private ButtonMemberSwap removeButton;
@@ -46,6 +46,6 @@ public class PanelListManage extends JPanel{
 	public void update(){
 		this.addButton.update();
 		this.removeButton.update();
-		this.settingsPanel.buttonReset.update();
+		this.settingsPanel.getResetButton().update();
 	}
 }

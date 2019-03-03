@@ -23,6 +23,8 @@ public class ButtonReset extends JButton{
 		this.setEnabled(false);
 
 		this.addActionListener(actionEvent -> {
+			int length = this.tributesPanel.getSelectedMembers().length;
+			
 			for(Member m : this.tributesPanel.getSelectedMembers()){
 				
 				if(m.isCustom()){
@@ -37,6 +39,7 @@ public class ButtonReset extends JButton{
 			}
 
 			tributesPanel.updateMemberLists();
+			tributesPanel.getMainWindow().setStatusBarText("Reset/removed %d members(s)", length);
 		});
 	}
 	

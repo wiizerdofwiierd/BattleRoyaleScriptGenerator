@@ -1,8 +1,8 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
 import sx.blah.discord.handle.obj.IGuild;
 
@@ -68,6 +68,11 @@ public class PanelManageTributes extends JPanel{
 
 	public void setSelectedMembers(Member[] selectedMembers){
 		this.selectedMembers = selectedMembers;
+		
+		if(selectedMembers.length == 0)
+			this.mainWindow.setStatusBarText("");
+		else
+			this.mainWindow.setStatusBarText("Selecting %d member(s)", selectedMembers.length);
 	}
 
 	public void updateGenerateButton(){

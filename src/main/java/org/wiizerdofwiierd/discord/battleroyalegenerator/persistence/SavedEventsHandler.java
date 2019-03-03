@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.AbstractGameEvent;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,5 +26,9 @@ public class SavedEventsHandler extends AbstractSerializationHandler<Map<String,
 
 	public static SavedEventsHandler getInstance(){
 		return instance;
+	}
+	
+	public Collection<AbstractGameEvent> getEvents(){
+		return this.object.values();
 	}
 }

@@ -11,6 +11,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class WindowGameManage extends JFrame{
 
@@ -21,6 +22,7 @@ public class WindowGameManage extends JFrame{
 	
 	private JTabbedPane tabbedPane;
 	private PanelManageTributes tributesPanel;
+	private PanelStatusBar statusBar;
 	
 	public WindowGameManage(IDiscordClient client, IGuild guild){
 		super("Manage Game Session");
@@ -31,13 +33,21 @@ public class WindowGameManage extends JFrame{
 		this.settings = SavedSettingsHandler.getInstance().getSettingsForGuild(guild);
 		this.settings.getMembers().repopulate(this.guild);
 		
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		
 		//Create and set the menu bar
 		MenuBarGameManage menuBar = new MenuBarGameManage(this);
 		this.setJMenuBar(menuBar);
 		
 		//Tabbed pane containing tabs for Tributes as well as each type of Event
+		c.gridx = 0;
+		c.gridy = 0;
 		this.tabbedPane = new JTabbedPane();
-		this.add(tabbedPane);
+		this.add(tabbedPane, c);
 		
 		//Create the tributes panel
 		this.tributesPanel = new PanelManageTributes(this);
@@ -49,6 +59,13 @@ public class WindowGameManage extends JFrame{
 		for(EventContext context : EventContext.values()){
 			tabbedPane.addTab(context.getName() + " Events", new PanelManageEvents(this, context));
 		}
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weighty = 0.0;
+		this.statusBar = new PanelStatusBar("Loaded %d members for guild %s", this.settings.getMembers().size(), guild.getName());
+		this.add(statusBar, c);
+		
 		
 		this.setPreferredSize(Util.getMultipleOfScreenResolution(0.5F, 0.5F));
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -84,4 +101,7 @@ public class WindowGameManage extends JFrame{
 		this.tabbedPane.setSelectedIndex(index);
 	}
 	
+	public void setStatusBarText(String text, Object... values){
+		this.statusBar.setStatus(text, values);
+	}
 }

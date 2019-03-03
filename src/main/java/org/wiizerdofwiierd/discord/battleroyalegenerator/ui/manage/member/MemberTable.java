@@ -1,14 +1,18 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.MouseAdapterListener;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseAdapter;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseMotionAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class MemberTable extends JTable{
+public class MemberTable extends JTable implements MouseAdapterListener{
 
 	private static final String[] HEADERS = {"Gender", "Name", "Nickname"};
 	private static final float[] HEADER_WIDTHS = {0.1F, 0.45F, 0.45F};
@@ -18,6 +22,8 @@ public class MemberTable extends JTable{
 	private PanelManageTributes tributesPanel;
 	
 	private boolean participation;
+	
+	private MemberTableRenderer renderer;
 	
 	public MemberTable(PanelManageTributes tributesPanel, boolean participation){
 		super(new String[0][HEADERS.length], HEADERS);
@@ -32,7 +38,9 @@ public class MemberTable extends JTable{
 		
 		this.getTableHeader().setReorderingAllowed(false);
 		this.getTableHeader().setResizingAllowed(false);
-		this.setDefaultRenderer(String.class, new MemberTableRenderer(this.tributesPanel.getSettings()));
+		
+		this.renderer = new MemberTableRenderer();
+		this.setDefaultRenderer(String.class, renderer);
 		((DefaultTableCellRenderer) this.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		
 		getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(new GenderComboBox(this)));
@@ -40,7 +48,7 @@ public class MemberTable extends JTable{
 		getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new NicknameTextField(this)));
 		
 		for(int i = 0;i < HEADERS.length;i++){
-			getColumnModel().getColumn(i).setCellRenderer(new MemberTableRenderer(this.tributesPanel.getSettings()));
+			getColumnModel().getColumn(i).setCellRenderer(this.renderer);
 		}
 		
 		this.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
@@ -58,6 +66,9 @@ public class MemberTable extends JTable{
 			//Update button panel to reflect currently selected members
 			tributesPanel.updateButtonPanel();
 		});
+		
+		this.addMouseListener(new UpdatingMouseAdapter(this));
+		this.addMouseMotionListener(new UpdatingMouseMotionAdapter(this));
 	}
 
 	public PanelManageTributes getTributesPanel(){
@@ -100,5 +111,43 @@ public class MemberTable extends JTable{
 			memberIndex.put(index, m);
 			index++;
 		}
+	}
+
+	@Override
+	public Rectangle getBoundsForRow(int row){
+		int width = 0;
+		for(int i = 0;i < this.getColumnCount();i++){
+			width += this.getColumnModel().getColumn(i).getWidth();
+		}
+		
+		Rectangle rect = this.getCellRect(row, 0, true);
+		rect.width = width;
+
+		return rect;
+	}
+
+	@Override
+	public int getNumRows(){
+		return this.getModel().getRowCount();
+	}
+
+	@Override
+	public int getIndex(){
+		int index = this.renderer.getHoveredIndex();
+		if(index == -1) return index;
+		
+		return this.convertRowIndexToView(index);
+	}
+	
+	@Override
+	public void setIndex(int index){
+		this.renderer.setHoveredIndex(this.convertRowIndexToModel(index));
+		this.repaint();
+	}
+
+	@Override
+	public void reset(){
+		this.renderer.setHoveredIndex(-1);
+		this.repaint();
 	}
 }

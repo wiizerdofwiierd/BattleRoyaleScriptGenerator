@@ -5,11 +5,11 @@ import java.awt.*;
 
 public class PanelSettings extends JPanel{
 	
-	protected PanelManageTributes tributesPanel;
-	protected PanelListManage swapPanel;
-	
-	protected ButtonRandomize buttonRandomize;
-	protected ButtonReset buttonReset;
+	private PanelManageTributes tributesPanel;
+	private PanelListManage swapPanel;
+
+	private ButtonRandomize buttonRandomize;
+	private ButtonReset buttonReset;
 	
 	public PanelSettings(PanelManageTributes tributesPanel, PanelListManage swapPanel){
 		this.tributesPanel = tributesPanel;

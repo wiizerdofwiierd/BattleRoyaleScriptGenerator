@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.theme.UIConstants;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
 import javax.swing.*;
@@ -10,19 +10,13 @@ import java.awt.*;
 
 public class MemberTableRenderer extends DefaultTableCellRenderer{
 	
-	private static final Color COLOR_SELECTED = UIManager.getColor("Table.selectionBackground");
-	private static final Color COLOR_INVALID = new Color(255, 130, 130);
-	private static final Color COLOR_BOT = new Color(156, 169, 217);
-	private static final Color COLOR_CUSTOM = new Color(106, 216, 176);
-	
 	private static final int IMAGE_WIDTH = 64;
 	private static final int IMAGE_HEIGHT = 64;
 	
-	private Settings settings;
+	private int hoveredIndex = -1;
 	
-	public MemberTableRenderer(Settings settings){
+	public MemberTableRenderer(){
 		super();
-		this.settings = settings;
 	}
 	
 	@Override
@@ -40,26 +34,34 @@ public class MemberTableRenderer extends DefaultTableCellRenderer{
 		Member currentMember = ((MemberTable) table).getMemberAt(row);
 		
 		if(isSelected){
-			label.setBackground(COLOR_SELECTED);
+			label.setBackground(UIConstants.Colors.ELEMENT_SELECTED);
+		}
+		else if(this.hoveredIndex == row){
+			label.setBackground(UIConstants.Colors.ELEMENT_HOVERED);
 		}
 		else if(col != 0 && !Member.validateName(label.getText())){
-			label.setBackground(COLOR_INVALID);
+			label.setBackground(UIConstants.Colors.TABLE_NAME_INVALID);
 			label.setToolTipText("Name is not valid");
 		}
 		else if(currentMember.isBot()){
-			label.setBackground(COLOR_BOT);
+			label.setBackground(UIConstants.Colors.TABLE_MEMBER_BOT);
 		}
 		else if(currentMember.isCustom()){
-			label.setBackground(COLOR_CUSTOM);
+			label.setBackground(UIConstants.Colors.TABLE_MEMBER_CUSTOM);
 			label.setToolTipText(Util.formatHTMLImageTag(currentMember.getCustomImgURL(), IMAGE_WIDTH, IMAGE_HEIGHT));
 		}
 		else{
 			label.setBackground(Color.WHITE);
 		}
 		
-		if(col == 2){
-		}
-		
 		return label;
+	}
+
+	public int getHoveredIndex(){
+		return this.hoveredIndex;
+	}
+
+	public void setHoveredIndex(int index){
+		this.hoveredIndex = index;
 	}
 }

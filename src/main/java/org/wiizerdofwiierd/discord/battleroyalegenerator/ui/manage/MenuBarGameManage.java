@@ -14,6 +14,9 @@ import java.io.File;
 
 public class MenuBarGameManage extends JMenuBar{
 	
+	private static final int MASK_SHORTCUT = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	private static final int MASK_SHIFT = KeyEvent.SHIFT_DOWN_MASK;
+	
 	private WindowGameManage mainWindow;
 	
 	public MenuBarGameManage(WindowGameManage mainWindow){
@@ -30,10 +33,11 @@ public class MenuBarGameManage extends JMenuBar{
 		//File menu
 		//------------
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
+		fileMenu.setMnemonic('F');
 
 		JMenuItem saveButton = new JMenuItem("Save", saveIcon);
-		saveButton.addActionListener(actionEvent -> SavedSettingsHandler.getInstance().save());
+		saveButton.addActionListener(actionEvent -> saveFile(null));
+		saveButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, MASK_SHORTCUT));
 		fileMenu.add(saveButton);
 		
 		JMenuItem saveAsButton = new JMenuItem("Save as...");
@@ -47,9 +51,10 @@ public class MenuBarGameManage extends JMenuBar{
 			if(!file.getPath().endsWith(".json")){
 				file = new File(file + ".json");
 			}
-
-			SavedSettingsHandler.getInstance().save(file);
+			
+			saveFile(file);
 		});
+		saveAsButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, MASK_SHORTCUT + MASK_SHIFT));
 		fileMenu.add(saveAsButton);
 
 		fileMenu.addSeparator();
@@ -61,7 +66,7 @@ public class MenuBarGameManage extends JMenuBar{
 			File file = fileChooser.getSelectedFile();
 			if(file == null) return;
 
-			SavedSettingsHandler.getInstance().load(file);
+			loadFile(file);
 			
 			//Set the window to use our newly loaded settings
 			this.mainWindow.setSettings(SavedSettingsHandler.getInstance().getSettingsForGuild(this.mainWindow.getGuild()));
@@ -72,7 +77,13 @@ public class MenuBarGameManage extends JMenuBar{
 			//Set the selected tab in the window to the Tributes tab
 			this.mainWindow.setSelectedTab(0);
 		});
+		loadButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, MASK_SHORTCUT));
 		fileMenu.add(loadButton);
+
+		JMenuItem reloadButton = new JMenuItem("Reload");
+		reloadButton.addActionListener(actionEvent -> loadFile(null));
+		reloadButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, MASK_SHORTCUT + MASK_SHIFT));
+		fileMenu.add(reloadButton);
 
 		fileMenu.addSeparator();
 		
@@ -94,7 +105,7 @@ public class MenuBarGameManage extends JMenuBar{
 		//Edit menu
 		//------------
 		JMenu editMenu = new JMenu("Edit");
-		fileMenu.setMnemonic(KeyEvent.VK_E);
+		editMenu.setMnemonic('E');
 
 		JMenuItem customUserButton = new JMenuItem("Add custom member");
 		customUserButton.addActionListener(actionEvent -> SwingUtilities.invokeLater(() -> {
@@ -102,6 +113,7 @@ public class MenuBarGameManage extends JMenuBar{
 			window.setLocationRelativeTo(this.mainWindow);
 			window.setVisible(true);
 		}));
+		customUserButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		editMenu.add(customUserButton);
 		
 		this.add(editMenu);
@@ -117,5 +129,31 @@ public class MenuBarGameManage extends JMenuBar{
 			JMenu m = this.getMenu(i);
 			m.setMargin(new Insets(0, 2, 0, 2));
 		}
+	}
+	
+	private void saveFile(File file){
+		SavedSettingsHandler handler = SavedSettingsHandler.getInstance();
+		
+		if(file == null){
+			handler.save();
+		}
+		else{
+			handler.save(file);
+		}
+
+		this.mainWindow.setStatusBarText("Saved file %s%n", handler.getLastModifiedFile().getAbsolutePath());
+	}
+	
+	private void loadFile(File file){
+		SavedSettingsHandler handler = SavedSettingsHandler.getInstance();
+		
+		if(file == null){
+			handler.load();
+		}
+		else{
+			handler.load(file);
+		}
+
+		this.mainWindow.setStatusBarText("Loaded file %s%n", handler.getLastModifiedFile().getAbsolutePath());
 	}
 }

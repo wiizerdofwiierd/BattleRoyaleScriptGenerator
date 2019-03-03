@@ -8,6 +8,7 @@ import sx.blah.discord.handle.obj.IGuild;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class WindowGuildSelect extends JFrame{
 
@@ -61,7 +62,15 @@ public class WindowGuildSelect extends JFrame{
 		this.button = button;
 		
 		this.add(panel);
-
+		
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "choose");
+		panel.getActionMap().put("choose", new AbstractAction(){
+			@Override
+			public void actionPerformed(ActionEvent actionEvent){
+				button.doClick();
+			}
+		});
+		
 		
 		this.setPreferredSize(Util.getMultipleOfScreenResolution(0.2F, 0.5F));
 		this.setResizable(false);

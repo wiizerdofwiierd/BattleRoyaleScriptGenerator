@@ -11,4 +11,8 @@ public class PanelEventModify extends JPanel{
 
 		this.setBorder(BorderFactory.createTitledBorder("Event details"));
 	}
+	
+	public void update(){
+		
+	}
 }

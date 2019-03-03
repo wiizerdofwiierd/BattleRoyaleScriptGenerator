@@ -3,9 +3,11 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.istack.internal.Nullable;
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSerializationHandler<T>{
@@ -43,13 +45,16 @@ public abstract class AbstractSerializationHandler<T>{
 		String displayPath = getDisplayPath(file);
 		
 		System.out.println("Loading file " + displayPath + "...");
+		
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
 
 		if(!file.exists()){
 			System.out.println("File " + displayPath + " not found! Creating...");
 			save(file);
 			return this;
 		}
-
+		
 		try(BufferedReader reader = new BufferedReader(new FileReader(file))){
 			String json = reader.lines().collect(Collectors.joining());
 
@@ -64,8 +69,11 @@ public abstract class AbstractSerializationHandler<T>{
 		}
 
 		this.lastModified = file;
+		
+		stopWatch.stop();
+		long millis = stopWatch.getTime(TimeUnit.MILLISECONDS);
 
-		System.out.println("File " + displayPath + " loaded");
+		System.out.printf("File %s loaded in %d millisecond(s)%n", displayPath, millis);
 		return this;
 	}
 
@@ -89,11 +97,14 @@ public abstract class AbstractSerializationHandler<T>{
 			System.out.println("Saved file: " + getDisplayPath(output));
 		}
 		catch(IOException e){
-			System.err.print("Exception thrown while saving file: " + e.getClass().getSimpleName() + System.lineSeparator()
-					+ e.getMessage());
+			System.err.printf("Exception thrown while saving file: %s%n%s%n", e.getClass().getSimpleName(), e.getMessage());
 		}
 
 		this.lastModified = output;
+	}
+	
+	public File getLastModifiedFile(){
+		return this.lastModified;
 	}
 	
 	public void registerTypeForSerialization(Class<?> baseType, @Nullable Object typeAdapter){

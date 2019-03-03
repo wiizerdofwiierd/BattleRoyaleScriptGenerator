@@ -6,6 +6,8 @@ import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameMan
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class DialogCreateMember extends JDialog{
@@ -50,6 +52,7 @@ public class DialogCreateMember extends JDialog{
 			this.mainWindow.getSettings().getMembers().add(member);
 			this.mainWindow.getTributesPanel().updateMemberLists();
 			this.mainWindow.setSelectedTab(0);
+			this.mainWindow.setStatusBarText("Custom member created successfully");
 			this.dispose();
 		});
 		c.fill = GridBagConstraints.NONE;
@@ -59,6 +62,16 @@ public class DialogCreateMember extends JDialog{
 		c.weightx = 1.0;
 		addButton.setPreferredSize(new Dimension(150, 25));
 		this.add(addButton, c);
+		
+		//Press create button when pressing Enter in the text area
+		urlInput.addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyPressed(KeyEvent keyEvent){
+				if(keyEvent.getKeyCode() == KeyEvent.VK_ENTER){
+					addButton.doClick();
+				}
+			}
+		});
 
 		
 		this.setResizable(false);

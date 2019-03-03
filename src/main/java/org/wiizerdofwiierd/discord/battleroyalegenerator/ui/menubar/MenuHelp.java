@@ -10,6 +10,8 @@ public class MenuHelp extends JMenu{
 	public MenuHelp(){
 		super("Help");
 		
+		this.setMnemonic('H');
+		
 		JMenuItem consoleButton = new JMenuItem("Console");
 		consoleButton.addActionListener(actionEvent -> Main.getConsoleWindow().setVisible(true));
 		this.add(consoleButton);

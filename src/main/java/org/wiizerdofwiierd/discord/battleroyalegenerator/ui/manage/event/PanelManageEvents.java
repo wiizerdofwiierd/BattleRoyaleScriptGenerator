@@ -1,5 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.AbstractGameEvent;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventContext;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
 
@@ -14,6 +15,8 @@ public class PanelManageEvents extends JPanel{
 	private PanelEventList eventListPanel;
 	private PanelEventSelected eventsUsedPanel;
 	private PanelEventModify eventModifyPanel;
+	
+	private AbstractGameEvent[] selectedEvents;
 	
 	public PanelManageEvents(WindowGameManage mainWindow, EventContext context){
 		this.mainWindow = mainWindow;
@@ -41,5 +44,13 @@ public class PanelManageEvents extends JPanel{
 	
 	public EventContext getContext(){
 		return this.context;
+	}
+	
+	public AbstractGameEvent[] getSelectedEvents(){
+		return this.selectedEvents;
+	}
+	
+	public void setSelectedEvents(AbstractGameEvent[] events){
+		this.selectedEvents = events;
 	}
 }

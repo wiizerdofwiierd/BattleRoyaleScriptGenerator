@@ -40,6 +40,7 @@ public class ButtonRandomize extends JButton{
 					.forEach(m -> m.setParticipating(true));				//Set each remaining member's participation to true
 
 			tributesPanel.updateMemberLists();
+			tributesPanel.getMainWindow().setStatusBarText("Members randomized");
 		});
 	}
 }
