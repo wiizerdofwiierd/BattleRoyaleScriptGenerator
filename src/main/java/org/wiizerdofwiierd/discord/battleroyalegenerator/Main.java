@@ -3,6 +3,8 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import org.slf4j.LoggerFactory;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
@@ -10,10 +12,8 @@ import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.console.WindowConsol
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild.WindowGuildSelect;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.setup.WindowTokenInput;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
-import sx.blah.discord.api.ClientBuilder;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.util.DiscordException;
 
+import javax.security.auth.login.LoginException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -24,7 +24,7 @@ public final class Main{
 	
 	public static final File TOKEN_FILE = new File(System.getProperty("user.dir") + File.separator + "token.txt");
 	
-	private static IDiscordClient client = null;
+	private static JDA client = null;
 	
 	private static WindowGuildSelect guildSelectionWindow = null;
 	private static WindowConsole consoleWindow = null;
@@ -51,7 +51,7 @@ public final class Main{
 		
 		initLogin();
 		
-		client.getDispatcher().registerListener(new EventListener());
+		client.addEventListener(new ReadyListener());
 
 		SwingUtilities.invokeLater(() -> {
 			guildSelectionWindow = new WindowGuildSelect(client);
@@ -89,18 +89,18 @@ public final class Main{
 		try{
 			client = login(token);
 		}
-		catch(DiscordException e){
+		catch(LoginException e){
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, "Failed to log in. Is your token.txt correct?", "Error", JOptionPane.ERROR_MESSAGE);
 			System.exit(-2);
 		}
 	}
 	
-	public static IDiscordClient login(String token){
-		return new ClientBuilder().withToken(token).login();
+	public static JDA login(String token) throws LoginException{
+		return new JDABuilder(token).build();
 	}
 
-	public static IDiscordClient getClient(){
+	public static JDA getClient(){
 		return client;
 	}
 	

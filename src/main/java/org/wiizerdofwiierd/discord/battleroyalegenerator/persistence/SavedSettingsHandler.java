@@ -1,9 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import com.google.gson.reflect.TypeToken;
+import net.dv8tion.jda.api.entities.Guild;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Setting.SettingDeserializer;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Setting.SettingSerializer;
-import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;
 import java.util.HashMap;
@@ -32,8 +32,8 @@ public class SavedSettingsHandler extends AbstractSerializationHandler<Map<Strin
 		return instance;
 	}
 
-	public Settings getSettingsForGuild(IGuild guild){
-		return getSettingsForGuild(guild.getLongID());
+	public Settings getSettingsForGuild(Guild guild){
+		return getSettingsForGuild(guild.getIdLong());
 	}
 
 	public Settings getSettingsForGuild(Long guildId){

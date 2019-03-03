@@ -1,8 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 
 import javax.swing.*;
 
@@ -25,16 +26,17 @@ public class ButtonReset extends JButton{
 		this.addActionListener(actionEvent -> {
 			int length = this.tributesPanel.getSelectedMembers().length;
 			
-			for(Member m : this.tributesPanel.getSelectedMembers()){
+			for(GameMember m : this.tributesPanel.getSelectedMembers()){
 				
 				if(m.isCustom()){
 					this.tributesPanel.getSettings().getMembers().remove(m);
 				}
 				else{
-					IDiscordClient client = this.tributesPanel.getMainWindow().getClient();
-					IGuild guild = this.tributesPanel.getMainWindow().getGuild();
+					JDA client = this.tributesPanel.getMainWindow().getClient();
+					Guild guild = this.tributesPanel.getMainWindow().getGuild();
 					
-					m.restoreInfo(client.getUserByID(m.getId()), guild);
+					Member member = guild.getMember(client.getUserById(m.getId()));
+					m.restoreInfo(member);
 				}
 			}
 
@@ -44,12 +46,12 @@ public class ButtonReset extends JButton{
 	}
 	
 	public void update(){
-		Member[] selected = this.tributesPanel.getSelectedMembers();
+		GameMember[] selected = this.tributesPanel.getSelectedMembers();
 		
 		boolean foundMember = false;
 		boolean foundCustom = false;
 		
-		for(Member m : selected){
+		for(GameMember m : selected){
 			if(m.isCustom())
 				foundCustom = true;
 			else

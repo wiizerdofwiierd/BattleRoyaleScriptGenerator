@@ -2,12 +2,9 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.Nullable;
-import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSerializationHandler<T>{
@@ -46,7 +43,7 @@ public abstract class AbstractSerializationHandler<T>{
 		
 		System.out.println("Loading file " + displayPath + "...");
 		
-		StopWatch stopWatch = new StopWatch();
+		Stopwatch stopWatch = new Stopwatch();
 		stopWatch.start();
 
 		if(!file.exists()){
@@ -71,7 +68,7 @@ public abstract class AbstractSerializationHandler<T>{
 		this.lastModified = file;
 		
 		stopWatch.stop();
-		long millis = stopWatch.getTime(TimeUnit.MILLISECONDS);
+		long millis = stopWatch.getTime();
 
 		System.out.printf("File %s loaded in %d millisecond(s)%n", displayPath, millis);
 		return this;
@@ -107,15 +104,40 @@ public abstract class AbstractSerializationHandler<T>{
 		return this.lastModified;
 	}
 	
-	public void registerTypeForSerialization(Class<?> baseType, @Nullable Object typeAdapter){
+	public void registerTypeForSerialization(Class<?> baseType, Object typeAdapter){
 		this.gsonSerializer.registerTypeHierarchyAdapter(baseType, typeAdapter);
 	}
 	
-	public void registerTypeForDeserialization(Class<?> baseType, @Nullable Object typeAdapter){
+	public void registerTypeForDeserialization(Class<?> baseType, Object typeAdapter){
 		this.gsonDeserializer.registerTypeHierarchyAdapter(baseType, typeAdapter);
 	}
 	
 	protected String getDisplayPath(File file){
 		return file.getParent().equals(System.getProperty("user.dir")) ? file.getName() : file.getAbsolutePath();
+	}
+	
+	private static class Stopwatch{
+		
+		private long startTime;
+		private long endTime;
+		
+		public Stopwatch(){
+			this.startTime = 0;
+			this.endTime = -1;
+		}
+		
+		public long getTime(){
+			return this.endTime == -1 ? System.currentTimeMillis() - this.startTime : this.endTime - this.startTime;
+		}
+		
+		public void start(){
+			this.startTime = System.currentTimeMillis();
+			this.endTime = -1;
+		}
+		
+		public long stop(){
+			this.endTime = System.currentTimeMillis();
+			return getTime();
+		}
 	}
 }

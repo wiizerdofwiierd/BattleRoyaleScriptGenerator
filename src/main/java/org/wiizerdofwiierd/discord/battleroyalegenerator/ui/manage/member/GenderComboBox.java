@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Gender;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 
 import javax.swing.*;
 
@@ -15,8 +15,8 @@ public class GenderComboBox extends JComboBox{
 		}
 
 		this.addActionListener(actionEvent -> {
-			Member[] members = parentTable.getTributesPanel().getSelectedMembers();
-			for(Member m : members){
+			GameMember[] members = parentTable.getTributesPanel().getSelectedMembers();
+			for(GameMember m : members){
 				m.setGender((Gender) this.getSelectedItem());
 			}
 		});

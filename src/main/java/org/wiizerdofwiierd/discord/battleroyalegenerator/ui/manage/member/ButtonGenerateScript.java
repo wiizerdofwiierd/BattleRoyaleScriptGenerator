@@ -2,7 +2,7 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.ScriptGenerator;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.web.ScriptExecutor;
@@ -62,8 +62,8 @@ public class ButtonGenerateScript extends JButton{
 		
 		boolean sizeMet = participating == required;
 		boolean validNames = true;
-		for(Member m : members.getMembersByParticipation(true, settings)){
-			if(!Member.validateName(m.getName() + m.getNickname())){
+		for(GameMember m : members.getMembersByParticipation(true, settings)){
+			if(!GameMember.validateName(m.getName() + m.getNickname())){
 				validNames = false;
 				break;
 			}

@@ -1,6 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild;
 
-import sx.blah.discord.handle.obj.IGuild;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -42,7 +42,7 @@ public class GuildList extends JList{
 		return this.mainWindow;
 	}
 	
-	public IGuild getSelectedGuild(){
+	public Guild getSelectedGuild(){
 		return this.model.getGuildAt(getSelectedIndex());
 	}
 }

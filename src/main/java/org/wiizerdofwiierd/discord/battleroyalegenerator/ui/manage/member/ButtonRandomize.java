@@ -2,7 +2,7 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.CastSize;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 
 import javax.swing.*;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ButtonRandomize extends JButton{
 			CastSize castSize = settings.castSize.getValue();
 			
 			settings.getMembers().forEach(m -> m.setParticipating(false));	//Set each member's participation to false
-			List<Member> members = settings.getMembers().stream()
+			List<GameMember> members = settings.getMembers().stream()
 					.filter(m -> !m.isBot() || showBots)					//Filter out bots according to our settings
 					.filter(m -> !m.isCustom() || showCustom)				//Filter out custom users according to our settings
 					.collect(Collectors.toList());

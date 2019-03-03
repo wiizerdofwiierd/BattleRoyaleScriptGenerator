@@ -54,24 +54,24 @@ public final class ScriptExecutor{
 				@Override
 				public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue){
 					if(newValue == State.SUCCEEDED){
-						
+
 						String location = webEngine.getLocation();
 						if(!ScriptExecutor.this.hasSetSize){
 							System.out.println("Setting cast size...");
 
 							int castSize = ScriptExecutor.this.settings.castSize.getValue().getNumPlayers();
 							webEngine.load(String.format(URL_SIZE, castSize));
-							
+
 							ScriptExecutor.this.hasSetSize = true;
 							ScriptExecutor.this.generatePanel.setProgress(0.5F);
 						}
 						else if(!ScriptExecutor.this.hasExecuted){
-							
+
 							if(location.equals(URL_EDIT)){
 								System.out.println("Executing script...");
 
 								webEngine.executeScript(script);
-								
+
 								ScriptExecutor.this.hasExecuted = true;
 								ScriptExecutor.this.generatePanel.setProgress(0.7F);
 
@@ -93,10 +93,10 @@ public final class ScriptExecutor{
 						else if(location.equals(URL_SAVE)){
 							NodeList nodes = webEngine.getDocument().getElementsByTagName("a");
 							outer:
-							for(int i = 0;i < nodes.getLength();i++){
+							for(int i = 0; i < nodes.getLength(); i++){
 
 								Node n = nodes.item(i);
-								for(int j = 0;j < n.getAttributes().getLength();j++){
+								for(int j = 0; j < n.getAttributes().getLength(); j++){
 
 									String name = n.getAttributes().item(j).getNodeName();
 									String value = n.getAttributes().item(j).getNodeValue();

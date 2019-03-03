@@ -1,6 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 
 import javax.swing.*;
 
@@ -20,7 +20,7 @@ public class ButtonMemberSwap extends JButton{
 			int size = tributesPanel.getSelectedMembers().length;
 			System.out.printf("Setting %d members to participation = %s%n", size, this.participation);
 			
-			for(Member m : this.tributesPanel.getSelectedMembers()){
+			for(GameMember m : this.tributesPanel.getSelectedMembers()){
 				m.setParticipating(this.participation);
 			}
 			
@@ -38,7 +38,7 @@ public class ButtonMemberSwap extends JButton{
 	}
 	
 	public void update(){
-		Member[] selected = this.tributesPanel.getSelectedMembers();
+		GameMember[] selected = this.tributesPanel.getSelectedMembers();
 		if(selected.length == 0){
 			this.setEnabled(false);
 		}
