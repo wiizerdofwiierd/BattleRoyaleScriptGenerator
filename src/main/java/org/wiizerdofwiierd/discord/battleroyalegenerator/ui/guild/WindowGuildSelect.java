@@ -84,6 +84,5 @@ public class WindowGuildSelect extends JFrame{
 		System.out.println("Retrieving guilds...");
 		model.populate(this.client);
 		this.guildList.updateUI();
-		this.repaint();
 	}
 }

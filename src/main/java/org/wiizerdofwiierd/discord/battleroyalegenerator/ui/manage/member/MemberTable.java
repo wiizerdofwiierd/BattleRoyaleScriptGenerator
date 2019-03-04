@@ -2,10 +2,13 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.RowHoverListener;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.theme.UIConstants;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +24,7 @@ public class MemberTable extends JTable implements RowHoverListener{
 	
 	private boolean participation;
 	
-	private MemberTableRenderer renderer;
+	private int hoveredIndex = -1;
 	
 	public MemberTable(PanelManageTributes tributesPanel, boolean participation){
 		super(new String[0][HEADERS.length], HEADERS);
@@ -37,17 +40,11 @@ public class MemberTable extends JTable implements RowHoverListener{
 		this.getTableHeader().setReorderingAllowed(false);
 		this.getTableHeader().setResizingAllowed(false);
 		
-		this.renderer = new MemberTableRenderer();
-		this.setDefaultRenderer(String.class, renderer);
 		((DefaultTableCellRenderer) this.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		
 		getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(new GenderComboBox(this)));
 		getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new NameTextField(this)));
 		getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new NicknameTextField(this)));
-		
-		for(int i = 0;i < HEADERS.length;i++){
-			getColumnModel().getColumn(i).setCellRenderer(this.renderer);
-		}
 		
 		this.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
 			//Get selected row indices
@@ -77,8 +74,38 @@ public class MemberTable extends JTable implements RowHoverListener{
 	}
 	
 	@Override
-	public boolean isCellEditable(int row, int col){
-		return true;
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int column){
+		//Convert from row index to absolute index given by the model; fixes issues when sorting the table
+		row = this.convertRowIndexToModel(row);
+
+		JLabel label = (JLabel) super.prepareRenderer(renderer, row, column);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setToolTipText(null);
+
+		GameMember currentMember = this.getMemberAt(row);
+
+		if(isRowSelected(row)){
+			label.setBackground(UIConstants.Colors.ELEMENT_SELECTED);
+		}
+		else if(this.hoveredIndex == row){
+			label.setBackground(UIConstants.Colors.ELEMENT_HOVERED);
+		}
+		else if(column != 0 && !GameMember.validateName(label.getText())){
+			label.setBackground(UIConstants.Colors.TABLE_NAME_INVALID);
+			label.setToolTipText("Name is not valid");
+		}
+		else if(currentMember.isBot()){
+			label.setBackground(UIConstants.Colors.TABLE_MEMBER_BOT);
+		}
+		else if(currentMember.isCustom()){
+			label.setBackground(UIConstants.Colors.TABLE_MEMBER_CUSTOM);
+			label.setToolTipText(Util.formatHTMLImageTag(currentMember.getCustomImgURL(), 64, 64));
+		}
+		else{
+			label.setBackground(Color.WHITE);
+		}
+
+		return label;
 	}
 	
 	public void update(){
@@ -130,21 +157,20 @@ public class MemberTable extends JTable implements RowHoverListener{
 
 	@Override
 	public int getIndex(){
-		int index = this.renderer.getHoveredIndex();
-		if(index == -1) return index;
+		if(this.hoveredIndex == -1) return hoveredIndex;
 		
-		return this.convertRowIndexToView(index);
+		return this.convertRowIndexToView(this.hoveredIndex);
 	}
 	
 	@Override
 	public void setIndex(int index){
-		this.renderer.setHoveredIndex(this.convertRowIndexToModel(index));
+		this.hoveredIndex = this.convertRowIndexToModel(index);
 		this.repaint();
 	}
 
 	@Override
 	public void reset(){
-		this.renderer.setHoveredIndex(-1);
+		this.hoveredIndex = -1;
 		this.repaint();
 	}
 }

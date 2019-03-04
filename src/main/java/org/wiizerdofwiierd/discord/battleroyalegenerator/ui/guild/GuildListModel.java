@@ -3,6 +3,7 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
+
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.stream.Collectors;

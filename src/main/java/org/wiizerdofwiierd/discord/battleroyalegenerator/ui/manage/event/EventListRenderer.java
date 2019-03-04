@@ -1,18 +1,17 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.AbstractGameEvent;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.FatalGameEvent;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.theme.UIConstants;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class EventListRenderer implements ListCellRenderer<AbstractGameEvent>{
+public class EventListRenderer implements ListCellRenderer<GameEvent>{
 	
 	private int hoveredIndex = -1;
 	
 	@Override
-	public Component getListCellRendererComponent(JList<? extends AbstractGameEvent> list, AbstractGameEvent event, int index, boolean isSelected, boolean hasFocus){
+	public Component getListCellRendererComponent(JList<? extends GameEvent> list, GameEvent event, int index, boolean isSelected, boolean hasFocus){
 		
 		EventListRendererPanel component = new EventListRendererPanel(event);
 		
@@ -23,7 +22,7 @@ public class EventListRenderer implements ListCellRenderer<AbstractGameEvent>{
 			component.setBackground(UIConstants.Colors.ELEMENT_HOVERED);
 			component.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
-		else if(event instanceof FatalGameEvent){
+		else if(event.isFatal()){
 			component.setBackground(UIConstants.Colors.TABLE_EVENT_FATAL);
 		}
 		else{

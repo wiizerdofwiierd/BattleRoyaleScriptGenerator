@@ -1,18 +1,18 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelEventList extends JPanel{
-	
-	private PanelManageEvents eventsPanel;
-	
+public class PanelEventList extends AbstractEventListPanel{
+
 	public PanelEventList(PanelManageEvents eventsPanel){
-		this.eventsPanel = eventsPanel;
-		
+		super(eventsPanel,false);
+
 		this.setBorder(BorderFactory.createTitledBorder("All events"));
 		this.setLayout(new GridBagLayout());
-		
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -25,16 +25,50 @@ public class PanelEventList extends JPanel{
 		innerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		this.add(innerPanel, c);
 		
-		//List of all events
+		
+		//Panel for displaying events
+		EventList eventList = getEventList();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weighty = 0.95;
-		innerPanel.add(new EventList(false), c);
+		c.weighty = 0.94;
+
+		//Scroll pane for event list
+		JScrollPane scrollPane = new JScrollPane(eventList,  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		innerPanel.add(scrollPane, c);
 		
 		//Create event button
+		JButton buttonCreateEvent = new JButton("Create new...");
+		buttonCreateEvent.addActionListener(actionEvent -> {
+			SavedEventsHandler handler = SavedEventsHandler.getInstance();
+			
+			var newEvent = new GameEvent("New Event", getEventsPanel().getContext());
+			handler.addEvent(newEvent);
+			handler.save();
+			
+			eventList.update();
+			eventList.setSelectedValue(newEvent, true);
+		});
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weighty = 0.05;
-		innerPanel.add( new JButton("Create new..."), c);
+		innerPanel.add(buttonCreateEvent, c);
+
+		//Delete event button
+		JButton buttonDeleteEvent = new JButton("Delete");
+		buttonDeleteEvent.addActionListener(actionEvent -> {
+			SavedEventsHandler handler = SavedEventsHandler.getInstance();
+			
+			handler.deleteEvent(eventList.getSelectedValue());
+			handler.save();
+
+			eventList.update();
+			eventList.setSelectedIndex(eventList.getSelectedIndex() - 1);
+		});
+		c.gridx = 0;
+		c.gridy = 2;
+		c.weighty = 0.01;
+		innerPanel.add(buttonDeleteEvent, c);
+		
+		eventList.update();
 	}
 }

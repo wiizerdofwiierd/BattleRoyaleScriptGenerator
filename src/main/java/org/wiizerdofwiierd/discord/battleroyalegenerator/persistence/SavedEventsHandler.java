@@ -1,14 +1,12 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import com.google.gson.reflect.TypeToken;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.AbstractGameEvent;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class SavedEventsHandler extends AbstractSerializationHandler<Map<String, AbstractGameEvent>>{
+public class SavedEventsHandler extends AbstractSerializationHandler<List<GameEvent>>{
 
 	public static final File EVENTS_FILE = new File(System.getProperty("user.dir") + File.separator + "events.json");
 
@@ -19,16 +17,25 @@ public class SavedEventsHandler extends AbstractSerializationHandler<Map<String,
 	}
 
 	public SavedEventsHandler(){
-		super(EVENTS_FILE, new TypeToken<Map<String, AbstractGameEvent>>(){}.getType());
+		super(EVENTS_FILE, new TypeToken<List<GameEvent>>(){}.getType());
 
-		this.object = new HashMap<>();
+		this.object = new ArrayList<>();
 	}
 
 	public static SavedEventsHandler getInstance(){
 		return instance;
 	}
 	
-	public Collection<AbstractGameEvent> getEvents(){
-		return this.object.values();
+	public List<GameEvent> getEvents(){
+		return this.object;
+	}
+	
+	public void addEvent(GameEvent event){
+		this.object.add(event);
+	}
+	
+	public void deleteEvent(GameEvent event){
+		if(event == null) return;
+		this.object.remove(event);
 	}
 }

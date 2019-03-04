@@ -1,38 +1,33 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.*;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventContext;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.RowHoverListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class EventList extends JList<AbstractGameEvent> implements RowHoverListener{
+public class EventList extends JList<GameEvent> implements RowHoverListener{
 	
+	private EventContext context;
 	private boolean selectionFilter;
 	
 	private EventListRenderer renderer;
+	private EventListModel model;
 	
-	public EventList(boolean selectionFilter){
+	public EventList(EventContext context, boolean selectionFilter){
+		this.context = context;
 		this.selectionFilter = selectionFilter;
-		List<AbstractGameEvent> events = new ArrayList<>();
+		
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		this.renderer = new EventListRenderer();
 		this.setCellRenderer(renderer);
 		
-		events.add(new SimpleGameEvent("Event name", new SimpleScenario(1, "(Player1) picks flowers"), EventContext.ARENA));
-		events.add(new FatalGameEvent(
-				"Fatal event", 
-				new FatalScenario(
-						3, 
-						"(Player1) kills (Player2) and (Player3) with an axe", 
-						new TributeInfo(true, false), 
-						new TributeInfo(false, true), 
-						new TributeInfo(false, true)
-				), EventContext.ARENA));
-		this.setListData(events.toArray(new AbstractGameEvent[events.size()]));
-
+		this.model = new EventListModel();
+		this.setModel(model);
+		
 		this.registerHoverAdapters();
 	}
 	
@@ -61,5 +56,17 @@ public class EventList extends JList<AbstractGameEvent> implements RowHoverListe
 	public void reset(){
 		this.renderer.setHoveredIndex(-1);
 		this.repaint();
+	}
+	
+	public void update(){
+		SavedEventsHandler handler = SavedEventsHandler.getInstance();
+		
+		this.model.clear();
+		
+		handler.getEvents().stream()
+				.filter(e -> e.getContext() == this.context)
+				.forEach(e -> this.model.addElement(e));
+		
+		this.updateUI();
 	}
 }

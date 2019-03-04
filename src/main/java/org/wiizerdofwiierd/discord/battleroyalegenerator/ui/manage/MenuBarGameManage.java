@@ -1,6 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild.WindowGuildSelect;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member.DialogCreateMember;
@@ -36,7 +37,10 @@ public class MenuBarGameManage extends JMenuBar{
 		fileMenu.setMnemonic('F');
 
 		JMenuItem saveButton = new JMenuItem("Save", saveIcon);
-		saveButton.addActionListener(actionEvent -> saveFile(null));
+		saveButton.addActionListener(actionEvent -> {
+			saveFile(null);
+			SavedEventsHandler.getInstance().save();
+		});
 		saveButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, MASK_SHORTCUT));
 		fileMenu.add(saveButton);
 		

@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.AbstractGameEvent;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventContext;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
 
 import javax.swing.*;
@@ -14,9 +14,9 @@ public class PanelManageEvents extends JPanel{
 	
 	private PanelEventList eventListPanel;
 	private PanelEventSelected eventsUsedPanel;
-	private PanelEventModify eventModifyPanel;
+	private PanelEventDetails eventDetailsPanel;
 	
-	private AbstractGameEvent[] selectedEvents;
+	private GameEvent[] selectedEvents;
 	
 	public PanelManageEvents(WindowGameManage mainWindow, EventContext context){
 		this.mainWindow = mainWindow;
@@ -34,23 +34,28 @@ public class PanelManageEvents extends JPanel{
 		this.add(eventsUsedPanel);
 		
 		//Right panel (Show details of currently selected event)
-		this.eventModifyPanel = new PanelEventModify(this);
-		this.add(eventModifyPanel);
+		this.eventDetailsPanel = new PanelEventDetails(this);
+		eventListPanel.setDetailsPanel(eventDetailsPanel);
+		this.add(eventDetailsPanel);
 	}
 	
 	public WindowGameManage getMainWindow(){
 		return this.mainWindow;
 	}
 	
+	public PanelEventList getListPanel(){
+		return this.eventListPanel;
+	}
+	
 	public EventContext getContext(){
 		return this.context;
 	}
 	
-	public AbstractGameEvent[] getSelectedEvents(){
+	public GameEvent[] getSelectedEvents(){
 		return this.selectedEvents;
 	}
 	
-	public void setSelectedEvents(AbstractGameEvent[] events){
+	public void setSelectedEvents(GameEvent[] events){
 		this.selectedEvents = events;
 	}
 }

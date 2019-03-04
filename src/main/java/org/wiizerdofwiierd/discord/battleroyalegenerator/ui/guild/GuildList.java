@@ -13,8 +13,7 @@ public class GuildList extends JList{
 	private GuildListModel model;
 	
 	public GuildList(WindowGuildSelect mainWindow){
-		GuildListModel model = new GuildListModel();
-		this.model = model;
+		this.model = new GuildListModel();
 		this.setModel(model);
 		
 		this.mainWindow = mainWindow;
