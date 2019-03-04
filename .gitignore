@@ -23,8 +23,8 @@
 hs_err_pid*
 
 # IntelliJ project files
-/.idea
-*.iml
+#/.idea
+#*.iml
 
 # Ignored project files
 /persistence.json
