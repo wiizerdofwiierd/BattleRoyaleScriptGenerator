@@ -32,6 +32,7 @@ public class ButtonGenerateScript extends JButton{
 		this.addActionListener(actionEvent -> {
 			this.generatePanel.toggleProgressBar();
 			
+			this.tributesPanel.getMainWindow().setStatusBarText("Generating script...");
 			String script = generator.generateScript();
 			this.generatePanel.setProgress(0.3F);
 			
@@ -41,6 +42,7 @@ public class ButtonGenerateScript extends JButton{
 			}
 			else{
 				this.generatePanel.setProgress(1.0F);
+				this.tributesPanel.getMainWindow().setStatusBarText("Script saved to %s", ScriptGenerator.OUTPUT_FILE);
 				
 				JLabel label = new JLabel("Script successfully generated!", SwingConstants.CENTER);
 				JOptionPane.showMessageDialog(

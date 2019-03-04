@@ -1,9 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.GameMember;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.MouseAdapterListener;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseAdapter;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseMotionAdapter;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.RowHoverListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -12,7 +10,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class MemberTable extends JTable implements MouseAdapterListener{
+public class MemberTable extends JTable implements RowHoverListener{
 
 	private static final String[] HEADERS = {"Gender", "Name", "Nickname"};
 	private static final float[] HEADER_WIDTHS = {0.1F, 0.45F, 0.45F};
@@ -67,8 +65,7 @@ public class MemberTable extends JTable implements MouseAdapterListener{
 			tributesPanel.updateButtonPanel();
 		});
 		
-		this.addMouseListener(new UpdatingMouseAdapter(this));
-		this.addMouseMotionListener(new UpdatingMouseMotionAdapter(this));
+		this.registerHoverAdapters();
 	}
 
 	public PanelManageTributes getTributesPanel(){

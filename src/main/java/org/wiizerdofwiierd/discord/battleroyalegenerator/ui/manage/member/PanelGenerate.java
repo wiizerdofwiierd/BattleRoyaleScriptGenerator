@@ -80,6 +80,10 @@ public class PanelGenerate extends JPanel{
 		this.add(settingsPanel, c);
 	}
 	
+	public PanelManageTributes getTributesPanel(){
+		return this.tributesPanel;
+	}
+	
 	public ButtonGenerateScript getButton(){
 		return this.generateButton;
 	}

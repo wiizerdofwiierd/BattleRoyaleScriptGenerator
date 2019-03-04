@@ -10,12 +10,13 @@ import java.io.*;
 import java.util.stream.Collectors;
 
 public final class ScriptGenerator{
+
+	public static final String OUTPUT_FILE = System.getProperty("user.dir") + File.separator + "royale_name_changer.js";
 	
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	
 	private static final String ENTRY_TEMPLATE = "contestants.push([\"%s\", \"%s\", \"%s\", %d]);";
 	
-	private static final String DEFAULT_OUTPUT = "royale_name_changer.js";
 
 	private JDA client;
 	private Guild guild;
@@ -42,7 +43,7 @@ public final class ScriptGenerator{
 		}
 
 		//File to output the script to
-		File output = new File(System.getProperty("user.dir") + File.separator + DEFAULT_OUTPUT);
+		File output = new File(OUTPUT_FILE);
 		
 		//Write to the file
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
@@ -70,7 +71,6 @@ public final class ScriptGenerator{
 					}
 					else{
 						User user = client.getUserById(m.getId());
-//						IUser user = client.getUserByID(m.getId());
 						avatarUrl = (user).getAvatarUrl().replace(".webp", ".png");
 					}
 					

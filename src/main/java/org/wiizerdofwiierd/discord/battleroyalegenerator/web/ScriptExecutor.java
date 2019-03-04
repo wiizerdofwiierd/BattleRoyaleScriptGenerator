@@ -92,7 +92,7 @@ public final class ScriptExecutor{
 						}
 						else if(location.equals(URL_SAVE)){
 							NodeList nodes = webEngine.getDocument().getElementsByTagName("a");
-							outer:
+							
 							for(int i = 0; i < nodes.getLength(); i++){
 
 								Node n = nodes.item(i);
@@ -103,6 +103,8 @@ public final class ScriptExecutor{
 
 									if(name.equals("href") && value.startsWith(SAVE_PREFIX)){
 										System.out.println("Session link: " + value);
+										generatePanel.getTributesPanel().getMainWindow().setStatusBarText("Link generated: %s", value);
+										
 										presentURL(value);
 										ScriptExecutor.this.generatePanel.setProgress(1.0F);
 										webEngine.getLoadWorker().stateProperty().removeListener(this);

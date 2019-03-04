@@ -67,15 +67,6 @@ public class MenuBarGameManage extends JMenuBar{
 			if(file == null) return;
 
 			loadFile(file);
-			
-			//Set the window to use our newly loaded settings
-			this.mainWindow.setSettings(SavedSettingsHandler.getInstance().getSettingsForGuild(this.mainWindow.getGuild()));
-			
-			//Update the member lists to display our new set of members
-			this.mainWindow.getTributesPanel().updateMemberLists();
-			
-			//Set the selected tab in the window to the Tributes tab
-			this.mainWindow.setSelectedTab(0);
 		});
 		loadButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, MASK_SHORTCUT));
 		fileMenu.add(loadButton);
@@ -147,13 +138,22 @@ public class MenuBarGameManage extends JMenuBar{
 	private void loadFile(File file){
 		SavedSettingsHandler handler = SavedSettingsHandler.getInstance();
 		
-		if(file == null){
+		//Load the specified file/reload last file
+		if(file == null)
 			handler.load();
-		}
-		else{
+		else 
 			handler.load(file);
-		}
 
+		//Set the window to use our newly loaded settings
+		this.mainWindow.setSettings(handler.getSettingsForGuild(this.mainWindow.getGuild()));
+
+		//Update the member lists to display our new set of members
+		this.mainWindow.getTributesPanel().updateMemberLists();
+
+		//Set the selected tab in the window to the Tributes tab
+		this.mainWindow.setSelectedTab(0);
+
+		//Change the status bar to show the loaded file
 		this.mainWindow.setStatusBarText("Loaded file %s%n", handler.getLastModifiedFile().getAbsolutePath());
 	}
 }

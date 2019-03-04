@@ -7,6 +7,8 @@ import javax.swing.*;
 public class NicknameTextField extends JTextField{
 	
 	public NicknameTextField(MemberTable parentTable){
+		this.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		this.addActionListener(actionEvent -> {
 			String nickname = this.getText();
 

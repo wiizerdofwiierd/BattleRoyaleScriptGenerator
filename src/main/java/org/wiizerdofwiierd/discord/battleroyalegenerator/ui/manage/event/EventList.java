@@ -1,16 +1,14 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.*;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.MouseAdapterListener;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseAdapter;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseMotionAdapter;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.RowHoverListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventList extends JList<AbstractGameEvent> implements MouseAdapterListener{
+public class EventList extends JList<AbstractGameEvent> implements RowHoverListener{
 	
 	private boolean selectionFilter;
 	
@@ -35,8 +33,7 @@ public class EventList extends JList<AbstractGameEvent> implements MouseAdapterL
 				), EventContext.ARENA));
 		this.setListData(events.toArray(new AbstractGameEvent[events.size()]));
 
-		this.addMouseListener(new UpdatingMouseAdapter(this));
-		this.addMouseMotionListener(new UpdatingMouseMotionAdapter(this));
+		this.registerHoverAdapters();
 	}
 	
 	@Override
