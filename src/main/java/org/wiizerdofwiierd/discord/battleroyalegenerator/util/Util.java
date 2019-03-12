@@ -2,6 +2,7 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.util;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,16 @@ import java.net.URISyntaxException;
 
 public final class Util{
 
+	/**
+	 * Wraps a component in a panel containing only a TitledBorder
+	 * @param component
+	 * @param title
+	 * @return
+	 */
+	public static TitledWrapperPanel wrapComponent(Component component, String title){
+		return new TitledWrapperPanel(component, title);
+	}
+	
 	public static InputStreamReader getReaderForResource(String path){
 		if(!path.startsWith("/")){
 			path = "/" + path;
@@ -54,5 +65,22 @@ public final class Util{
 
 	public static void printException(String message, Exception e){
 		System.err.println(message + ": " + e.getClass().getSimpleName() + System.lineSeparator() + e.getMessage());
+	}
+
+	private static class TitledWrapperPanel extends JPanel{
+
+		private static final GridBagConstraints CONSTRAINTS = new GridBagConstraints();
+
+		static{
+			CONSTRAINTS.fill = GridBagConstraints.BOTH;
+			CONSTRAINTS.weightx = 1.0;
+			CONSTRAINTS.weighty = 1.0;
+		}
+
+		public TitledWrapperPanel(Component component, String title){
+			this.setLayout(new GridBagLayout());
+			this.add(component, CONSTRAINTS);
+			this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), title));
+		}
 	}
 }

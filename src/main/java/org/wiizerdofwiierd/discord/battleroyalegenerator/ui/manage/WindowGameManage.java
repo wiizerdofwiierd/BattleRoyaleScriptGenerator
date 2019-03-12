@@ -35,7 +35,7 @@ public class WindowGameManage extends JFrame{
 		
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
+		c.fill    = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		
@@ -44,9 +44,11 @@ public class WindowGameManage extends JFrame{
 		this.setJMenuBar(menuBar);
 		
 		//Tabbed pane containing tabs for Tributes as well as each type of Event
+		this.tabbedPane = new JTabbedPane();
+		
 		c.gridx = 0;
 		c.gridy = 0;
-		this.tabbedPane = new JTabbedPane();
+		
 		this.add(tabbedPane, c);
 		
 		//Create the tributes panel
@@ -58,11 +60,21 @@ public class WindowGameManage extends JFrame{
 		//Add a tab for each Event type
 		for(EventContext context : EventContext.values()){
 			tabbedPane.addTab(context.getName() + " Events", new PanelManageEvents(this, context));
+			
+			tabbedPane.addChangeListener(e -> {
+				Component component = tabbedPane.getSelectedComponent();
+				if(component instanceof PanelManageEvents){
+					
+					//Update the list on the tab we're switching to
+					((PanelManageEvents) component).getEventListPanel().getEventList().update();
+				}
+			});
 		}
 		
-		c.gridx = 0;
-		c.gridy = 1;
+		c.gridx   = 0;
+		c.gridy   = 1;
 		c.weighty = 0.0;
+		
 		this.statusBar = new PanelStatusBar("Loaded %d members for guild %s", this.settings.getMembers().size(), guild.getName());
 		this.add(statusBar, c);
 		

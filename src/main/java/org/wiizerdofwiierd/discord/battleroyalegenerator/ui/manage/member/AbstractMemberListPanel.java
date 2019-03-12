@@ -29,7 +29,7 @@ public abstract class AbstractMemberListPanel extends JPanel{
 
 		this.memberTable = new MemberTable(this.tributesPanel, participation);
 		this.memberTable.getSelectionModel().addListSelectionListener(actionEvent -> {
-			for(AbstractMemberListPanel a : this.panels){
+			for(AbstractMemberListPanel a : panels){
 				if(a != this){
 					a.memberTable.clearSelection();
 				}

@@ -25,4 +25,9 @@ public enum EventContext{
 	public String getTagFatal(){
 		return getTag() + "fatal";
 	}
+	
+	@Override
+	public String toString(){
+		return this.name;
+	}
 }

@@ -1,6 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.menubar;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.console.WindowConsole;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
 import javax.swing.*;
@@ -11,12 +12,15 @@ public class MenuHelp extends JMenu{
 		super("Help");
 		
 		this.setMnemonic('H');
-		
-		JMenuItem consoleButton = new JMenuItem("Console");
-		consoleButton.addActionListener(actionEvent -> Main.getConsoleWindow().setVisible(true));
-		this.add(consoleButton);
 
-		this.addSeparator();
+		WindowConsole consoleWindow = Main.getConsoleWindow();
+		if(consoleWindow != null){
+			JMenuItem consoleButton = new JMenuItem("Console");
+			consoleButton.addActionListener(actionEvent -> consoleWindow.setVisible(true));
+			this.add(consoleButton);
+
+			this.addSeparator();
+		}
 
 		for(Author a : Author.values()){
 			JMenuItem versionButton = new JMenuItem(String.format("%s by %s", a.getContribution(), a.getName()));

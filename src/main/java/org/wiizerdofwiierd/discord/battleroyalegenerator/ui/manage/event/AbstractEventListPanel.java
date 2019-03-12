@@ -5,14 +5,16 @@ import javax.swing.*;
 public abstract class AbstractEventListPanel extends JPanel{
 	
 	private PanelManageEvents eventsPanel;
-	private PanelEventDetails detailsPanel;
 	private EventList list;
 	
 	public AbstractEventListPanel(PanelManageEvents eventsPanel, boolean selectionFilter){
 		this.eventsPanel = eventsPanel;
 		this.list = new EventList(eventsPanel.getContext(), selectionFilter);
 		
-		this.list.addListSelectionListener(e -> detailsPanel.showDetails(this.list.getSelectedValue()));
+		this.list.addListSelectionListener(e -> {
+			if(e.getValueIsAdjusting()) return;
+			eventsPanel.setSelectedEvent(this.list.getSelectedValue());
+		});
 	}
 	
 	public PanelManageEvents getEventsPanel(){
@@ -23,16 +25,7 @@ public abstract class AbstractEventListPanel extends JPanel{
 		return this.list;
 	}
 	
-	public PanelEventDetails getDetailsPanel(){
-		return this.detailsPanel;
-	}
-	
-	public void setDetailsPanel(PanelEventDetails detailsPanel){
-		this.detailsPanel = detailsPanel;
-	}
-	
 	public void update(){
-		this.list.updateUI();
-		this.repaint();
+		this.list.update();
 	}
 }

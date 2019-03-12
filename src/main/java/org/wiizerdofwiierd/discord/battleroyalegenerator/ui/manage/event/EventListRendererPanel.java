@@ -1,12 +1,12 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventContext;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventScenario;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EventListRendererPanel extends JPanel{
@@ -20,7 +20,15 @@ public class EventListRendererPanel extends JPanel{
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		
-		JLabel name = new JLabel(event.getName());
+		boolean isArenaEvent = event.getContext() == EventContext.ARENA;
+		//If the event is an arena event, use the name. Otherwise, display the scenario text
+		String effectiveName;
+		if(isArenaEvent)
+			effectiveName = event.getName();
+		else 
+			effectiveName = event.getScenarios().get(0).getText();
+		
+		JLabel name = new JLabel(effectiveName);
 		name.setHorizontalAlignment(SwingConstants.CENTER);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -32,9 +40,9 @@ public class EventListRendererPanel extends JPanel{
 		this.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 		
 		int gridy = 2;
-		EventScenario[] scenarios = event.getScenarios();
-		for(int i = 0;i < scenarios.length;i++){
-			EventScenario s = scenarios[i];
+		List<EventScenario> scenarios = event.getScenarios();
+		for(int i = 0;i < scenarios.size();i++){
+			EventScenario s = scenarios.get(i);
 			
 			JLabel tributeCount = new JLabel("Tributes: " + s.getNumTributes());
 			tributeCount.setHorizontalAlignment(SwingConstants.CENTER);
@@ -43,21 +51,26 @@ public class EventListRendererPanel extends JPanel{
 			c.gridwidth = 2;
 			this.add(tributeCount, c);
 			
-			JLabel text = new JLabel(s.getText());
-			text.setHorizontalAlignment(SwingConstants.CENTER);
-			c.gridx = 0;
-			c.gridy = ++gridy;
-			c.gridwidth = 2;
-			this.add(text, c);
+			if(isArenaEvent){
+				//Scenario text
+				JLabel text = new JLabel(s.getText());
+				text.setHorizontalAlignment(SwingConstants.CENTER);
+				
+				c.gridx = 0;
+				c.gridy = ++gridy;
+				c.gridwidth = 2;
+				
+				this.add(text, c);
+			}
 			
 			if(s.isFatal()){
 				gridy++;
 				
 				List<String> killedList = new ArrayList<>();
-				Arrays.stream(s.getKillerInfo().getKilled()).forEach(x -> killedList.add("" + (x + 1)));
+				s.getKilled().forEach(x -> killedList.add("" + (x + 1)));
 
 				List<String> killersList = new ArrayList<>();
-				Arrays.stream(s.getKillerInfo().getKillers()).forEach(x -> killersList.add("" + (x + 1)));
+				s.getKillers().forEach(x -> killersList.add("" + (x + 1)));
 				
 				JLabel killed = new JLabel("Killed: " + String.join(", ", killedList));
 				killed.setHorizontalAlignment(SwingConstants.CENTER);
@@ -74,7 +87,7 @@ public class EventListRendererPanel extends JPanel{
 				this.add(killers, c);
 			}
 			
-			if(i < scenarios.length - 1){
+			if(i < scenarios.size() - 1){
 				c.gridx = 0;
 				c.gridy = ++gridy;
 				c.gridwidth = 2;

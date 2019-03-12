@@ -1,7 +1,8 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEventFactory;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.SubtleScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ public class PanelEventList extends AbstractEventListPanel{
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
+		c.fill    = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 
@@ -28,29 +29,31 @@ public class PanelEventList extends AbstractEventListPanel{
 		
 		//Panel for displaying events
 		EventList eventList = getEventList();
-		c.gridx = 0;
-		c.gridy = 0;
+		
+		c.gridx   = 0;
+		c.gridy   = 0;
 		c.weighty = 0.94;
 
-		//Scroll pane for event list
-		JScrollPane scrollPane = new JScrollPane(eventList,  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		innerPanel.add(scrollPane, c);
+		innerPanel.add(new SubtleScrollPane(eventList), c);
 		
 		//Create event button
 		JButton buttonCreateEvent = new JButton("Create new...");
 		buttonCreateEvent.addActionListener(actionEvent -> {
 			SavedEventsHandler handler = SavedEventsHandler.getInstance();
 			
-			var newEvent = new GameEvent("New Event", getEventsPanel().getContext());
+			var newEvent = GameEventFactory.createEvent(getEventsPanel().getContext());
+			
 			handler.addEvent(newEvent);
 			handler.save();
 			
 			eventList.update();
 			eventList.setSelectedValue(newEvent, true);
 		});
-		c.gridx = 0;
-		c.gridy = 1;
+		
+		c.gridx   = 0;
+		c.gridy   = 1;
 		c.weighty = 0.05;
+		
 		innerPanel.add(buttonCreateEvent, c);
 
 		//Delete event button
@@ -64,9 +67,11 @@ public class PanelEventList extends AbstractEventListPanel{
 			eventList.update();
 			eventList.setSelectedIndex(eventList.getSelectedIndex() - 1);
 		});
-		c.gridx = 0;
-		c.gridy = 2;
+		
+		c.gridx   = 0;
+		c.gridy   = 2;
 		c.weighty = 0.01;
+		
 		innerPanel.add(buttonDeleteEvent, c);
 		
 		eventList.update();

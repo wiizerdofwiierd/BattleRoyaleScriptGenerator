@@ -1,10 +1,14 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import com.google.gson.reflect.TypeToken;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventScenario;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventScenario.ScenarioDeserializer;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventScenario.ScenarioSerializer;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.GameEvent;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SavedEventsHandler extends AbstractSerializationHandler<List<GameEvent>>{
 
@@ -20,6 +24,9 @@ public class SavedEventsHandler extends AbstractSerializationHandler<List<GameEv
 		super(EVENTS_FILE, new TypeToken<List<GameEvent>>(){}.getType());
 
 		this.object = new ArrayList<>();
+
+		this.registerTypeForSerialization(EventScenario.class, new ScenarioSerializer());
+		this.registerTypeForDeserialization(EventScenario.class, new ScenarioDeserializer());
 	}
 
 	public static SavedEventsHandler getInstance(){

@@ -1,15 +1,22 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.game.event;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameEvent{
+	
+	public static final int MAX_SCENARIOS = 6;
 	
 	private String name;
 	private EventContext context;
-	private EventScenario[] scenarios;
+	private List<EventScenario> scenarios;
 	
 	public GameEvent(String name, EventContext context, EventScenario... scenarios){
 		this.name = name;
 		this.context = context;
-		this.scenarios = scenarios;
+		
+		this.scenarios = new LinkedList<>(Arrays.asList(scenarios));
 	}
 	
 	public String getName(){
@@ -20,7 +27,7 @@ public class GameEvent{
 		return this.context;
 	}
 	
-	public EventScenario[] getScenarios(){
+	public List<EventScenario> getScenarios(){
 		return this.scenarios;
 	}
 	
@@ -36,7 +43,7 @@ public class GameEvent{
 		this.name = name;
 	}
 	
-	public void setScenarios(EventScenario[] scenarios){
-		this.scenarios = scenarios;
+	public void setContext(EventContext context){
+		this.context = context;
 	}
 }
