@@ -20,7 +20,7 @@ import java.io.*;
 
 public final class Main{
 	
-	public static final String VERSION = "1.4";
+	public static final String VERSION = "2.0";
 	
 	public static final File TOKEN_FILE = new File(System.getProperty("user.dir") + File.separator + "token.txt");
 	
@@ -57,6 +57,15 @@ public final class Main{
 			guildSelectionWindow = new WindowGuildSelect(client);
 			guildSelectionWindow.setVisible(true);
 		});
+
+//		String workingDir = System.getProperty("user.dir");
+		
+		/* Load events from other json files
+		EventLoader loader = new EventLoader();
+		loader.load(new File(workingDir + File.separator + "bloodbath.json"), EventContext.BLOODBATH);
+		loader.load(new File(workingDir + File.separator + "day.json"), EventContext.DAY);
+		loader.load(new File(workingDir + File.separator + "night.json"), EventContext.NIGHT);
+		*/
 	}
 
 	public static void initLogin(){

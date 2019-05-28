@@ -67,10 +67,10 @@ public class EventListRendererPanel extends JPanel{
 				gridy++;
 				
 				List<String> killedList = new ArrayList<>();
-				s.getKilled().forEach(x -> killedList.add("" + (x + 1)));
+				s.getKilled().forEach(x -> killedList.add("" + x));
 
 				List<String> killersList = new ArrayList<>();
-				s.getKillers().forEach(x -> killersList.add("" + (x + 1)));
+				s.getKillers().forEach(x -> killersList.add("" + x));
 				
 				JLabel killed = new JLabel("Killed: " + String.join(", ", killedList));
 				killed.setHorizontalAlignment(SwingConstants.CENTER);

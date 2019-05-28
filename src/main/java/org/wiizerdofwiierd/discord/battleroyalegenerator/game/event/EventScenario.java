@@ -86,6 +86,10 @@ public class EventScenario{
 		}
 	}
 	
+	public void setKilled(Set<Integer> killed){
+		this.killed = killed;
+	}
+	
 	public void setKiller(int tributeNum, boolean value){
 		if(value){
 			this.killers.add(tributeNum);
@@ -93,6 +97,10 @@ public class EventScenario{
 		else{
 			this.killers.remove(tributeNum);
 		}
+	}
+	
+	public void setKillers(Set<Integer> killers){
+		this.killers = killers;
 	}
 
 	public static class ScenarioSerializer implements JsonSerializer<EventScenario>{
@@ -103,8 +111,14 @@ public class EventScenario{
 			
 			object.addProperty("text", scenario.text);
 			object.addProperty("numTributes", scenario.numTributes);
-			object.addProperty("killed", scenario.killed.stream().map(String::valueOf).collect(Collectors.joining(SERIALIZATION_DELIMITER)));
-			object.addProperty("killers", scenario.killers.stream().map(String::valueOf).collect(Collectors.joining(SERIALIZATION_DELIMITER)));
+			
+			//If the event has killed tributes, serialize those too
+			if(!scenario.killed.isEmpty())
+				object.addProperty("killed", scenario.killed.stream().map(String::valueOf).collect(Collectors.joining(SERIALIZATION_DELIMITER)));
+			
+			//If the event has killers, serialize those too
+			if(!scenario.killers.isEmpty())
+				object.addProperty("killers", scenario.killers.stream().map(String::valueOf).collect(Collectors.joining(SERIALIZATION_DELIMITER)));
 			
 			return object;
 		}
@@ -120,8 +134,12 @@ public class EventScenario{
 			
 			scenario.text = object.get("text").getAsString();
 			scenario.numTributes = object.get("numTributes").getAsInt();
-			scenario.killed = stringToSet(object.get("killed").getAsString());
-			scenario.killers = stringToSet(object.get("killers").getAsString());
+			
+			if(object.has("killed"))
+				scenario.killed = stringToSet(object.get("killed").getAsString());
+			
+			if(object.has("killers"))
+				scenario.killers = stringToSet(object.get("killers").getAsString());
 			
 			return scenario;
 		}

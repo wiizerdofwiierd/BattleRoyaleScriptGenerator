@@ -34,7 +34,7 @@ public class PanelEventList extends AbstractEventListPanel{
 		c.gridy   = 0;
 		c.weighty = 0.94;
 
-		innerPanel.add(new SubtleScrollPane(eventList), c);
+		innerPanel.add(new SubtleScrollPane(eventList, true), c);
 		
 		//Create event button
 		JButton buttonCreateEvent = new JButton("Create new...");
