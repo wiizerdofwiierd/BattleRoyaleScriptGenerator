@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.LoggerFactory;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedEventsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
@@ -106,7 +107,7 @@ public final class Main{
 	}
 	
 	public static JDA login(String token) throws LoginException{
-		return new JDABuilder(token).build();
+		return JDABuilder.create(token, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
 	}
 
 	public static JDA getClient(){
