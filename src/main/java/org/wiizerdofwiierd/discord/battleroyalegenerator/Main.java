@@ -51,8 +51,9 @@ public final class Main{
 		SavedEventsHandler.getInstance().load();
 		
 		initLogin();
+		
 		client.addEventListener(new ReadyListener());
-
+		
 		SwingUtilities.invokeLater(() -> {
 			guildSelectionWindow = new WindowGuildSelect(client);
 			guildSelectionWindow.setVisible(true);
@@ -98,7 +99,6 @@ public final class Main{
 	
 	public static JDA login(String token) throws LoginException{
 		return JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS).build();
-//		return JDABuilder.create(token, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
 	}
 
 	public static JDA getClient(){
