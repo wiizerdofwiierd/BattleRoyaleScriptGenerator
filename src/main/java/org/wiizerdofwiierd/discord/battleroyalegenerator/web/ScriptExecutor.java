@@ -103,9 +103,6 @@ public final class ScriptExecutor{
 									String name = n.getAttributes().item(j).getNodeName();
 									String value = n.getAttributes().item(j).getNodeValue();
 
-									System.out.println("Name: " + name);
-									System.out.println("Value: " + value);
-									
 									if(name.equals("href") && value.matches(SAVE_REGEX)){
 										System.out.println("Session link: " + value);
 										generatePanel.getTributesPanel().getMainWindow().setStatusBarText("Link generated: %s", value);
