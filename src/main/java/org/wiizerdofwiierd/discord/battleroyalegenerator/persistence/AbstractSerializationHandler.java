@@ -2,12 +2,12 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.Nullable;
-import org.apache.commons.lang3.time.StopWatch;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSerializationHandler<T>{
@@ -46,8 +46,7 @@ public abstract class AbstractSerializationHandler<T>{
 		
 		System.out.println("Loading file " + displayPath + "...");
 		
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
+		Instant startTime = Instant.now();
 
 		if(!file.exists()){
 			System.out.println("File " + displayPath + " not found! Creating...");
@@ -70,8 +69,9 @@ public abstract class AbstractSerializationHandler<T>{
 
 		this.lastModified = file;
 		
-		stopWatch.stop();
-		long millis = stopWatch.getTime(TimeUnit.MILLISECONDS);
+		Instant stopTime = Instant.now();
+
+		long millis = Duration.between(startTime, stopTime).toMillis();
 
 		System.out.printf("File %s loaded in %d millisecond(s)%n", displayPath, millis);
 		return this;

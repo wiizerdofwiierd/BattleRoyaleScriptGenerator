@@ -1,9 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.game;
 
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
-public class Member{
+public class Tribute{
 	
 	private static final String NAME_REGEX = "[a-zA-Z0-9 ,.'-:!?úóãíáéêç]*$";
 	
@@ -18,14 +18,14 @@ public class Member{
 	private boolean custom;
 
 	/**
-	 * Creates a new {@link Member} from an {@link IUser} and generates default values
-	 * @param user
+	 * Creates a new {@link Tribute} from an {@link User} and generates default values
+	 * @param member
 	 */
-	public Member(IUser user, IGuild guild){
-		this(user.getLongID(), Gender.MALE, user.getName(), user.getDisplayName(guild), null, false, user.isBot(), false);
+	public Tribute(Member member){
+		this(member.getIdLong(), Gender.MALE, member.getUser().getName(), member.getEffectiveName(), null, false, member.getUser().isBot(), false);
 	}
 
-	private Member(long id, Gender gender, String name, String nickname, String imgUrl, boolean participating, boolean bot, boolean custom){
+	private Tribute(long id, Gender gender, String name, String nickname, String imgUrl, boolean participating, boolean bot, boolean custom){
 		this.id = id;
 		this.gender = gender;
 		this.name = name;
@@ -36,8 +36,8 @@ public class Member{
 		this.custom = custom;
 	}
 	
-	public static Member createCustomMember(Gender gender, String name, String nickname, String imgUrl){
-		return new Member(-1L, gender, name, nickname, imgUrl, false, false, true);
+	public static Tribute createCustomMember(Gender gender, String name, String nickname, String imgUrl){
+		return new Tribute(-1L, gender, name, nickname, imgUrl, false, false, true);
 	}
 	
 	public static boolean validateName(String name){
@@ -100,9 +100,9 @@ public class Member{
 		this.participating = participating;
 	}
 	
-	public void restoreInfo(IUser user, IGuild guild){
+	public void restoreInfo(Member member){
 		this.gender = Gender.MALE;
-		this.name = user.getName();
-		this.nickname = user.getDisplayName(guild);
+		this.name = member.getUser().getName();
+		this.nickname = member.getEffectiveName();
 	}
 }

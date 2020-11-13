@@ -1,10 +1,10 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.menubar.MenuHelp;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +15,12 @@ public class WindowGuildSelect extends JFrame{
 	protected JList guildList;
 	protected JButton button;
 	
-	private IDiscordClient client;
+	private JDA client;
 	
-	public WindowGuildSelect(IDiscordClient client){
+	public WindowGuildSelect(JDA client){
 		super("Select Server...");
+
+		System.out.println("Opening guild selection window");
 		
 		this.client = client;
 
@@ -48,7 +50,7 @@ public class WindowGuildSelect extends JFrame{
 		button.addActionListener(actionEvent -> {
 			WindowGuildSelect.this.setVisible(false);
 			
-			IGuild guild = guildList.getSelectedGuild();
+			Guild guild = guildList.getSelectedGuild();
 			WindowGameManage window = new WindowGameManage(client, guild);
 			
 			SwingUtilities.invokeLater(() -> window.setVisible(true));

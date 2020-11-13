@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Gender;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
 
 import javax.swing.*;
@@ -43,7 +43,7 @@ public class DialogCreateMember extends JDialog{
 		
 		JButton addButton = new JButton("Create");
 		addButton.addActionListener(actionEvent -> {
-			Member member = Member.createCustomMember(
+			Tribute member = Tribute.createCustomMember(
 					Gender.values()[new Random().nextInt(Gender.values().length)],
 					"Custom Member",
 					"Custom Member",

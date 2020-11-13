@@ -1,10 +1,10 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
+import net.dv8tion.jda.api.entities.Guild;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.TributeList;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.WindowGameManage;
-import sx.blah.discord.handle.obj.IGuild;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ public class PanelManageTributes extends JPanel{
 	private PanelListManage buttonPanel;
 	private PanelListSelected listSelected;
 	
-	private Member[] selectedMembers = new Member[0];
+	private Tribute[] selectedMembers = new Tribute[0];
 	
 	public PanelManageTributes(WindowGameManage mainWindow){
 		this.mainWindow = mainWindow;
@@ -49,7 +49,7 @@ public class PanelManageTributes extends JPanel{
 		return this.mainWindow;
 	}
 	
-	public IGuild getGuild(){
+	public Guild getGuild(){
 		return this.mainWindow.getGuild();
 	}
 	
@@ -57,16 +57,16 @@ public class PanelManageTributes extends JPanel{
 		return this.mainWindow.getSettings();
 	}
 
-	public MemberList getMembers(){
+	public TributeList getMembers(){
 		return this.mainWindow.getMembers();
 	}
 
-	public Member[] getSelectedMembers(){
+	public Tribute[] getSelectedMembers(){
 		return this.selectedMembers;
 	}
 	
 
-	public void setSelectedMembers(Member[] selectedMembers){
+	public void setSelectedMembers(Tribute[] selectedMembers){
 		this.selectedMembers = selectedMembers;
 		
 		if(selectedMembers.length == 0)

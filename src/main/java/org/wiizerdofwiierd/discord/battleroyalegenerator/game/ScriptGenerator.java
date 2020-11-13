@@ -1,10 +1,10 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.game;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
 
 import java.io.*;
 import java.util.stream.Collectors;
@@ -17,11 +17,11 @@ public final class ScriptGenerator{
 	
 	private static final String DEFAULT_OUTPUT = "royale_name_changer.js";
 
-	private IDiscordClient client;
-	private IGuild guild;
+	private JDA client;
+	private Guild guild;
 	private Settings settings;
 	
-	public ScriptGenerator(IDiscordClient client, IGuild guild, Settings settings){
+	public ScriptGenerator(JDA client, Guild guild, Settings settings){
 		this.client = client;
 		this.guild = guild;
 		this.settings = settings;
@@ -69,8 +69,8 @@ public final class ScriptGenerator{
 						avatarUrl = m.getCustomImgURL();
 					}
 					else{
-						IUser user = client.getUserByID(m.getId());
-						avatarUrl = user.getAvatarURL().replace(".webp", ".png");
+						User user = client.getUserById(m.getId());
+						avatarUrl = user.getAvatarUrl().replace(".webp", ".png");
 					}
 					
 					formattedList
@@ -82,7 +82,7 @@ public final class ScriptGenerator{
 		return formattedList.toString();
 	}
 	
-	private MemberList getMembers(){
+	private TributeList getMembers(){
 		return this.settings.getMembers();
 	}
 }

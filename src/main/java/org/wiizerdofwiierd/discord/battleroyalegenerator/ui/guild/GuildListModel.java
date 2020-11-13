@@ -1,8 +1,8 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.guild;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.Main;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -18,15 +18,15 @@ public class GuildListModel extends AbstractListModel{
 	}
 
 	/**
-	 * Populates the list with all the guilds the given {@link IDiscordClient} is on
-	 * @param client {@link IDiscordClient} used to populate the list
+	 * Populates the list with all the guilds the given {@link JDA} is on
+	 * @param client {@link JDA} used to populate the list
 	 */
-	public void populate(IDiscordClient client){
+	public void populate(JDA client){
 		this.guildIds.clear();
 		
-		for(IGuild g : client.getGuilds()){
+		for(Guild g : client.getGuilds()){
 			System.out.println("Adding guild " + g.getName());
-			guildIds.put(g.getLongID(), g.getName());
+			guildIds.put(g.getIdLong(), g.getName());
 		}
 		
 		System.out.println("Successfully retrieved " + client.getGuilds().size() + " guilds.");
@@ -36,8 +36,8 @@ public class GuildListModel extends AbstractListModel{
 		return this.guildIds.keySet().stream().collect(Collectors.toList()).get(index);
 	}
 	
-	public IGuild getGuildAt(int index){
-		return Main.getClient().getGuildByID(getGuildIdAt(index));
+	public Guild getGuildAt(int index){
+		return Main.getClient().getGuildById(getGuildIdAt(index));
 	}
 	
 	@Override

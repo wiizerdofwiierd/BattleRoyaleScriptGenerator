@@ -1,9 +1,9 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.game;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -11,15 +11,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MemberList implements Collection<Member>{
+public class TributeList implements Collection<Tribute>{
 	
-	private Collection<Member> members;
+	private Collection<Tribute> members;
 	
-	public MemberList(){
+	public TributeList(){
 		this.members = new ArrayList<>();
 	}
 	
-	public List<Member> getMembersByParticipation(boolean participation, Settings settings){
+	public List<Tribute> getMembersByParticipation(boolean participation, Settings settings){
 		boolean showBots = settings.showBots.getValue();
 		boolean showCustom = settings.showCustom.getValue();
 		
@@ -29,15 +29,15 @@ public class MemberList implements Collection<Member>{
 				.collect(Collectors.toList());
 	}
 	
-	public List<Member> getMembersByParticipation(boolean participation){
+	public List<Tribute> getMembersByParticipation(boolean participation){
 		return participation ? getParticipatingMembers() : getNonParticipatingMembers();
 	}
 	
-	public List<Member> getNonParticipatingMembers(){
+	public List<Tribute> getNonParticipatingMembers(){
 		return this.members.stream().filter(m -> !m.isParticipating()).collect(Collectors.toList());
 	}
 	
-	public List<Member> getParticipatingMembers(){
+	public List<Tribute> getParticipatingMembers(){
 		return this.members.stream().filter(m -> m.isParticipating()).collect(Collectors.toList());
 	}
 	
@@ -47,16 +47,17 @@ public class MemberList implements Collection<Member>{
 
 	/**
 	 * Repopulates the list, adding new members from the specified guild and hiding members not currently in it
-	 * @param guild - {@link IGuild} used to repopulate the list
+	 * @param guild - {@link Guild} used to repopulate the list
 	 */
-	public void repopulate(IGuild guild){
+	public void repopulate(Guild guild){
 		ArrayList<Long> userIds = new ArrayList<>();
-		guild.getUsers().stream().forEach(u -> userIds.add(u.getLongID()));
+		guild.getMembers().stream().forEach(m -> userIds.add(m.getIdLong()));
 		
 		outer:
-		for(IUser user : guild.getUsers()){
-			long id = user.getLongID();
-			for(Member m : this.members){
+		for(Member member : guild.getMembers()){
+			long id = member.getIdLong();
+			
+			for(Tribute m : this.members){
 				
 				//Skip custom users
 				if(m.isCustom()) continue;
@@ -74,13 +75,13 @@ public class MemberList implements Collection<Member>{
 				}
 			}
 
-			Member member = new Member(user, guild);
+			Tribute tribute = new Tribute(member);
 			//If the user has an invalid nickname, but a valid name, set the nickname to the name
-			if(!Member.validateName(member.getNickname()) && Member.validateName(member.getName())){
-				member.setNickname(member.getName());
+			if(!Tribute.validateName(tribute.getNickname()) && Tribute.validateName(tribute.getName())){
+				tribute.setNickname(tribute.getName());
 			}
 			
-			members.add(member);
+			members.add(tribute);
 		}
 
 		int purgeCount = purgeOrphans();
@@ -89,7 +90,7 @@ public class MemberList implements Collection<Member>{
 	}
 	
 	public int purgeOrphans(){
-		List<Member> purgeList = this.stream().filter(m -> m.isOrphaned()).collect(Collectors.toList());
+		List<Tribute> purgeList = this.stream().filter(m -> m.isOrphaned()).collect(Collectors.toList());
 		purgeList.forEach(this::remove);
 		
 		return purgeList.size();
@@ -106,12 +107,12 @@ public class MemberList implements Collection<Member>{
 	}
 
 	@Override
-	public Iterator<Member> iterator(){
+	public Iterator<Tribute> iterator(){
 		return this.members.iterator();
 	}
 
 	@Override
-	public void forEach(Consumer<? super Member> consumer){
+	public void forEach(Consumer<? super Tribute> consumer){
 		this.members.forEach(consumer);
 	}
 
@@ -126,7 +127,7 @@ public class MemberList implements Collection<Member>{
 	}
 
 	@Override
-	public boolean add(Member member){
+	public boolean add(Tribute member){
 		return this.members.add(member);
 	}
 
@@ -141,7 +142,7 @@ public class MemberList implements Collection<Member>{
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Member> collection){
+	public boolean addAll(Collection<? extends Tribute> collection){
 		return this.members.addAll(collection);
 	}
 
@@ -151,7 +152,7 @@ public class MemberList implements Collection<Member>{
 	}
 
 	@Override
-	public boolean removeIf(Predicate<? super Member> predicate){
+	public boolean removeIf(Predicate<? super Tribute> predicate){
 		return this.members.removeIf(predicate);
 	}
 
@@ -166,17 +167,17 @@ public class MemberList implements Collection<Member>{
 	}
 
 	@Override
-	public Spliterator<Member> spliterator(){
+	public Spliterator<Tribute> spliterator(){
 		return this.members.spliterator();
 	}
 
 	@Override
-	public Stream<Member> stream(){
+	public Stream<Tribute> stream(){
 		return this.members.stream();
 	}
 
 	@Override
-	public Stream<Member> parallelStream(){
+	public Stream<Tribute> parallelStream(){
 		return this.members.parallelStream();
 	}
 }

@@ -1,8 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
-import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
+import net.dv8tion.jda.api.entities.Guild;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
 
 import javax.swing.*;
 
@@ -25,16 +24,14 @@ public class ButtonReset extends JButton{
 		this.addActionListener(actionEvent -> {
 			int length = this.tributesPanel.getSelectedMembers().length;
 			
-			for(Member m : this.tributesPanel.getSelectedMembers()){
+			for(Tribute m : this.tributesPanel.getSelectedMembers()){
 				
 				if(m.isCustom()){
 					this.tributesPanel.getSettings().getMembers().remove(m);
 				}
 				else{
-					IDiscordClient client = this.tributesPanel.getMainWindow().getClient();
-					IGuild guild = this.tributesPanel.getMainWindow().getGuild();
-					
-					m.restoreInfo(client.getUserByID(m.getId()), guild);
+					Guild guild = this.tributesPanel.getMainWindow().getGuild();
+					m.restoreInfo(guild.getMemberById(m.getId()));
 				}
 			}
 
@@ -44,12 +41,12 @@ public class ButtonReset extends JButton{
 	}
 	
 	public void update(){
-		Member[] selected = this.tributesPanel.getSelectedMembers();
+		Tribute[] selected = this.tributesPanel.getSelectedMembers();
 		
 		boolean foundMember = false;
 		boolean foundCustom = false;
 		
-		for(Member m : selected){
+		for(Tribute m : selected){
 			if(m.isCustom())
 				foundCustom = true;
 			else

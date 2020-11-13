@@ -1,6 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.theme.UIConstants;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
@@ -31,7 +31,7 @@ public class MemberTableRenderer extends DefaultTableCellRenderer{
 		if(!(table instanceof MemberTable))
 			return label;
 
-		Member currentMember = ((MemberTable) table).getMemberAt(row);
+		Tribute currentMember = ((MemberTable) table).getMemberAt(row);
 		
 		if(isSelected){
 			label.setBackground(UIConstants.Colors.ELEMENT_SELECTED);
@@ -39,7 +39,7 @@ public class MemberTableRenderer extends DefaultTableCellRenderer{
 		else if(this.hoveredIndex == row){
 			label.setBackground(UIConstants.Colors.ELEMENT_HOVERED);
 		}
-		else if(col != 0 && !Member.validateName(label.getText())){
+		else if(col != 0 && !Tribute.validateName(label.getText())){
 			label.setBackground(UIConstants.Colors.TABLE_NAME_INVALID);
 			label.setToolTipText("Name is not valid");
 		}

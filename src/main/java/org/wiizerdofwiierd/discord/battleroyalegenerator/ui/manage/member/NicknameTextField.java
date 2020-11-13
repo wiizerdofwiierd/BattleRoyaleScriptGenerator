@@ -1,6 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
 
 import javax.swing.*;
 
@@ -10,8 +10,8 @@ public class NicknameTextField extends JTextField{
 		this.addActionListener(actionEvent -> {
 			String nickname = this.getText();
 
-			Member[] members = parentTable.getTributesPanel().getSelectedMembers();
-			for(Member m : members){
+			Tribute[] members = parentTable.getTributesPanel().getSelectedMembers();
+			for(Tribute m : members){
 				m.setNickname(nickname);
 			}
 			

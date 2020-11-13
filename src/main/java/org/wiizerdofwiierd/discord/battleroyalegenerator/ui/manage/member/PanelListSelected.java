@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.TributeList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -38,7 +38,7 @@ public class PanelListSelected extends AbstractMemberListPanel{
 	public void update(){
 		super.update();
 		
-		MemberList members = this.tributesPanel.getMembers();
+		TributeList members = this.tributesPanel.getMembers();
 		Settings settings = this.tributesPanel.getSettings();
 		
 		int selected = members.getMembersByParticipation(true, settings).size();

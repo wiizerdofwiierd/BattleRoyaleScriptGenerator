@@ -1,7 +1,7 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.persistence;
 
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.CastSize;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.TributeList;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class Settings{
 	public Setting<Boolean> autoCopyLink;
 	public Setting<CastSize> castSize;
 	
-	private MemberList members;
+	private TributeList members;
 	private List<String> events;
 	
 	public Settings(){
@@ -23,10 +23,10 @@ public class Settings{
 		this.autoCopyLink 		= new Setting<>(true);
 		this.castSize 			= new Setting<>(CastSize.SIZE_24);
 		
-		this.members = new MemberList();
+		this.members = new TributeList();
 	}
 
-	public MemberList getMembers(){
+	public TributeList getMembers(){
 		return this.members;
 	}
 }

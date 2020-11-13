@@ -1,6 +1,6 @@
 package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member;
 
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Member;
+import org.wiizerdofwiierd.discord.battleroyalegenerator.game.Tribute;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.MouseAdapterListener;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseAdapter;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.UpdatingMouseMotionAdapter;
@@ -17,7 +17,7 @@ public class MemberTable extends JTable implements MouseAdapterListener{
 	private static final String[] HEADERS = {"Gender", "Name", "Nickname"};
 	private static final float[] HEADER_WIDTHS = {0.1F, 0.45F, 0.45F};
 	
-	private HashMap<Integer, Member> memberIndex = new HashMap<>();
+	private HashMap<Integer, Tribute> memberIndex = new HashMap<>();
 	
 	private PanelManageTributes tributesPanel;
 	
@@ -61,7 +61,7 @@ public class MemberTable extends JTable implements MouseAdapterListener{
 			}
 			
 			//Map each selected index to its corresponding Member
-			tributesPanel.setSelectedMembers(Arrays.stream(indices).mapToObj(i -> this.memberIndex.get(i)).toArray(Member[]::new));
+			tributesPanel.setSelectedMembers(Arrays.stream(indices).mapToObj(i -> this.memberIndex.get(i)).toArray(Tribute[]::new));
 			
 			//Update button panel to reflect currently selected members
 			tributesPanel.updateButtonPanel();
@@ -75,7 +75,7 @@ public class MemberTable extends JTable implements MouseAdapterListener{
 		return this.tributesPanel;
 	}
 	
-	public Member getMemberAt(int row){
+	public Tribute getMemberAt(int row){
 		return this.memberIndex.get(row);
 	}
 	
@@ -102,7 +102,7 @@ public class MemberTable extends JTable implements MouseAdapterListener{
 		
 		//Generate new rows based on a participation value
 		int index = 0;
-		for(Member m : this.tributesPanel.getMembers().getMembersByParticipation(this.participation)){
+		for(Tribute m : this.tributesPanel.getMembers().getMembersByParticipation(this.participation)){
 			if(m.isBot() && !showBots) continue;
 			if(m.isCustom() && !showCustom) continue;
 
