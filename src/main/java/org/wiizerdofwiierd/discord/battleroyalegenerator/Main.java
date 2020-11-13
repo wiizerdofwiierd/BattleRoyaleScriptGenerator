@@ -21,7 +21,7 @@ import java.io.*;
 
 public final class Main{
 	
-	public static final String VERSION = "2.0";
+	public static final String VERSION = "2.1";
 	
 	public static final File TOKEN_FILE = new File(System.getProperty("user.dir") + File.separator + "token.txt");
 	
@@ -107,7 +107,7 @@ public final class Main{
 	}
 	
 	public static JDA login(String token) throws LoginException{
-		return JDABuilder.create(token, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
+		return JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS).build();
 	}
 
 	public static JDA getClient(){

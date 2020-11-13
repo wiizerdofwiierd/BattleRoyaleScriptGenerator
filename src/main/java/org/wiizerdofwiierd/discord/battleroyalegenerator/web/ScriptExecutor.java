@@ -27,7 +27,7 @@ public final class ScriptExecutor{
 	private static final String URL_VIEW = "http://brantsteele.net/hungergames/reaping.php";
 	private static final String URL_SAVE = "http://brantsteele.net/hungergames/save.php";
 	
-	private static final String SAVE_PREFIX = "http://brantsteele.net/hungergames/r.php?c=";
+	private static final String SAVE_REGEX = "^https?://brantsteele.net/hungergames/r.php\\?c=\\w+$";
 	
 	private PanelGenerate generatePanel;
 	private Settings settings;
@@ -95,13 +95,18 @@ public final class ScriptExecutor{
 							
 							for(int i = 0; i < nodes.getLength(); i++){
 
+								System.out.println("Node " + i);
+								
 								Node n = nodes.item(i);
 								for(int j = 0; j < n.getAttributes().getLength(); j++){
 
 									String name = n.getAttributes().item(j).getNodeName();
 									String value = n.getAttributes().item(j).getNodeValue();
 
-									if(name.equals("href") && value.startsWith(SAVE_PREFIX)){
+									System.out.println("Name: " + name);
+									System.out.println("Value: " + value);
+									
+									if(name.equals("href") && value.matches(SAVE_REGEX)){
 										System.out.println("Session link: " + value);
 										generatePanel.getTributesPanel().getMainWindow().setStatusBarText("Link generated: %s", value);
 										
