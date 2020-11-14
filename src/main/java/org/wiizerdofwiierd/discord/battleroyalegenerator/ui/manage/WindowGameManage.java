@@ -3,10 +3,8 @@ package org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.game.MemberList;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.game.event.EventContext;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.SavedSettingsHandler;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.persistence.Settings;
-import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.event.PanelManageEvents;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.ui.manage.member.PanelManageTributes;
 import org.wiizerdofwiierd.discord.battleroyalegenerator.util.Util;
 
@@ -58,6 +56,7 @@ public class WindowGameManage extends JFrame{
 		tabbedPane.addTab("Tributes", tributesPanel);
 		
 		//Add a tab for each Event type
+		/*
 		for(EventContext context : EventContext.values()){
 			tabbedPane.addTab(context.getName() + " Events", new PanelManageEvents(this, context));
 			
@@ -70,6 +69,7 @@ public class WindowGameManage extends JFrame{
 				}
 			});
 		}
+		*/
 		
 		c.gridx   = 0;
 		c.gridy   = 1;
