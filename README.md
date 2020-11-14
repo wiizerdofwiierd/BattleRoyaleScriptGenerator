@@ -1,5 +1,7 @@
 # BattleRoyaleScriptGenerator
 
+## This application is currently broken due to changes in the Discord API login flow. A fix is planned
+
 BattleRoyaleScriptGenerator is a Java application and Discord Bot that allows you to generate a Hunger Games style battle royale game session on [BrantSteele Hunger Games Simulator](http://brantsteele.net/hungergames/) using members from a Discord server
 
 ## Download
